@@ -9,8 +9,11 @@ from src.domain.entity.User import User
 
 class AnswerRepository(ABC):
     @abstractmethod
-    def add_answer(self, answer: Answer) -> None:
-        """Добавить ответ"""
+    def save_answer(self, answer: Answer) -> None:
+        """
+        Сохраняет ответ (создает новый или обновляет существующий).
+        Логика "create or update" (upsert) инкапсулируется здесь.
+        """
         pass
 
     @abstractmethod
@@ -44,11 +47,11 @@ class AnswerRepository(ABC):
         pass
 
     @abstractmethod
-    def edit_answer(self,answer_id: int, answer: Answer) -> None:
-        """Изменить вариант с id"""
+    def get_all_tests(self) -> List[Test]:
+        """Получить все ответы"""
         pass
 
     @abstractmethod
-    def get_all_tests(self) -> List[Test]:
-        """Получить все ответы"""
+    def get_user_answers_for_test(self, user_id: int, test_id: int) -> List[Answer]:
+        """Получить все ответы пользователя для конкретного теста."""
         pass
