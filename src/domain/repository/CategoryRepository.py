@@ -16,7 +16,7 @@ class CategoryRepository(ABC):
         pass
 
     @abstractmethod
-    def remove_category(self, category_id: id) -> None:
+    def remove_category(self, category_id: int) -> None:
         """Удалить категорию с id"""
         pass
 
@@ -28,4 +28,9 @@ class CategoryRepository(ABC):
     @abstractmethod
     def get_all_categories(self) -> List[Category]:
         """Получить все категории"""
+        pass
+
+    @abstractmethod
+    def get_categories_by_ids(self, ids: list[int]) -> List[Category]:
+        """Получить несколько категорий по списку их ID."""
         pass

@@ -1,5 +1,6 @@
 import datetime
 from dataclasses import dataclass
+from typing import Optional
 
 from src.domain.entity.Test import Test
 from src.domain.entity.User import User
@@ -10,9 +11,11 @@ class Result:
     id: int
     user: User
     test: Test
-    start_time: datetime
-    end_time: datetime
+    start_time: Optional[datetime.datetime]
+    end_time: Optional[datetime.datetime]
     status: str
+    link_token: Optional[str] = None
+    interpretation: Optional[str] = None
 
     def change_status(self, status):
         """"Изменить статус результата"""
@@ -25,4 +28,10 @@ class Result:
     def set_end_time(self, end_time):
         """"Задать время окончания"""
         self.end_time = end_time
+
+    def assign_link_token(self, token: str):
+        self.link_token = token
+
+    def set_interpretation(self, text: str):
+        self.interpretation = text
         

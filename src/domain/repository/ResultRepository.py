@@ -16,7 +16,7 @@ class ResultRepository(ABC):
         pass
 
     @abstractmethod
-    def get_user_test_result(self, user_id: int, test_id: id) -> Result:
+    def get_user_test_result(self, user_id: int, test_id: int) -> Result:
         """Получить результат пользователя с id по тесту с id"""
         pass
 
@@ -36,13 +36,13 @@ class ResultRepository(ABC):
         pass
 
     @abstractmethod
-    def delete_user_test_result(self, user_id: int, test_id: id) -> None:
+    def delete_user_test_result(self, user_id: int, test_id: int) -> None:
         """Удалить результат пользователя с id по тесту с id"""
         pass
 
     @abstractmethod
     def edit_result_by_id(self, result_id: int, result: Result) -> None:
-        """Изменить вариант с id"""
+        """Изменить результат с id"""
         pass
 
     @abstractmethod
@@ -53,4 +53,14 @@ class ResultRepository(ABC):
     @abstractmethod
     def get_all_results(self) -> List[Result]:
         """Получить все результаты"""
+        pass
+
+    @abstractmethod
+    def get_result_by_token(self, link_token: str) -> Result:
+        """Получить результат по токену-ссылке."""
+        pass
+
+    @abstractmethod
+    def get_all_finished(self) -> List[Result]:
+        """Получить все завершенные результаты."""
         pass
