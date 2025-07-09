@@ -38,10 +38,10 @@ class SQLAnswerRepository(AnswerRepository):
         db_answer = result.scalar_one_or_none()
         if db_answer:
             return Answer(
-                question=Question(id=db_answer.question_id, test=None, text="", scoring_rules={}),
+                question=Question(id=db_answer.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
                 user=User(id=db_answer.user_id),
                 variant=Variant(id=db_answer.variant_id, var_text=""),
-                result=Result(id=db_answer.result_id, user=None, test=None, start_time=None, end_time=None, status="")
+                result=Result(id=db_answer.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
             )
         raise ValueError("Answer not found")
 
@@ -52,10 +52,10 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=None, text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=None, test=None, start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -66,10 +66,10 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=None, text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=None, test=None, start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -80,10 +80,10 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=None, text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=None, test=None, start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -94,10 +94,10 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=None, text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=None, test=None, start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -122,10 +122,10 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=None, text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=None, test=None, start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -141,9 +141,9 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=None, text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=None, test=None, start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
