@@ -1,0 +1,15 @@
+from pydantic import BaseModel
+from typing import List
+
+class VariantResponse(BaseModel):
+    id: int
+    text: str
+    is_selected: bool = False
+
+class QuestionResponse(BaseModel):
+    id: int
+    text: str
+    index: int
+    total: int
+    progress_percent: float
+    variants: List[VariantResponse] 

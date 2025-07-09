@@ -16,7 +16,7 @@ class StartTestUseCase:
         self.test_repo = test_repo
         self.answer_repo = answer_repo
 
-    def execute(self, user_id: int, test_id: int) -> StartTestResponseDTO:
+    async def execute(self, user_id: int, test_id: int) -> StartTestResponseDTO:
         """
         Выполняет use case.
 
@@ -26,8 +26,8 @@ class StartTestUseCase:
         :raises Exception: Если у теста нет вопросов.
         """
         # 1. Получаем базовые сущности
-        user = self.user_repo.get_user(user_id)
-        test = self.test_repo.get_test(test_id)
+        user = await self.user_repo.get_user(user_id)
+        test = await self.test_repo.get_test(test_id)
 
         # 2. Создаем новую запись о прохождении теста (Result)
         result = Result(
@@ -38,15 +38,15 @@ class StartTestUseCase:
             end_time=None,
             status="in_progress"
         )
-        self.result_repo.add_result(result)
+        await self.result_repo.add_result(result)
 
         # 3. Получаем первый вопрос теста
-        questions = self.question_repo.get_test_questions(test_id)
+        questions = await self.question_repo.get_test_questions(test_id)
         if not questions:
             raise Exception("Test has no questions")
 
         question = questions[0]
-        variants = self.variant_repo.get_variants_by_question_id(question.id)
+        variants = await self.variant_repo.get_variants_by_question_id(question.id)
         
         # 4. Маппим данные в DTO для ответа.
         #    Количество отвеченных вопросов в начале теста всегда 0.

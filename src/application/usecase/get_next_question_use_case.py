@@ -10,7 +10,7 @@ class GetNextQuestionUseCase:
         self.question_repo = question_repo
         self.variant_repo = variant_repo
 
-    def execute(self, user_id: int, test_id: int) -> QuestionDTO | None:
+    async def execute(self, user_id: int, test_id: int) -> QuestionDTO | None:
         """
         Выполняет use case.
 
@@ -19,8 +19,8 @@ class GetNextQuestionUseCase:
         :return: DTO следующего вопроса или None, если все вопросы пройдены.
         """
         # 1. Получаем все вопросы теста и все ответы пользователя
-        questions = self.question_repo.get_test_questions(test_id)
-        answered_answers = self.answer_repo.get_user_answers(user_id)
+        questions = await self.question_repo.get_test_questions(test_id)
+        answered_answers = await self.answer_repo.get_user_answers(user_id)
         
         # 2. Создаем множество ID уже отвеченных вопросов для быстрого поиска
         answered_ids = {a.question.id for a in answered_answers}
@@ -28,7 +28,7 @@ class GetNextQuestionUseCase:
         # 3. Ищем первый вопрос, ID которого нет в множестве отвеченных
         for index, question in enumerate(questions, start=1):
             if question.id not in answered_ids:
-                variants = self.variant_repo.get_variants_by_question_id(question.id)
+                variants = await self.variant_repo.get_variants_by_question_id(question.id)
                 # Если нашли, маппим в DTO и возвращаем
                 return to_question_dto(
                     question=question,
