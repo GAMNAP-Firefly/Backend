@@ -1,10 +1,10 @@
-from pydantic import BaseSettings
+from pydantic.v1 import BaseSettings
 
 
 class Settings(BaseSettings):
-    app_name: str = "Fittin App"
+    app_name: str = "Fittest"
     debug: bool = True
-    database_url: str = "psql://postgres:postgres@db:5432/postgres"
+    database_url: str = "postgresql://postgres:postgres@localhost:5432/fittest"
     secret_key: str = "supersecretkey"
 
     class Config:

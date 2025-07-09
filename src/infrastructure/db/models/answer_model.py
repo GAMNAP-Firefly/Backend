@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+
 from src.infrastructure.db.base import Base
+
 
 class AnswerModel(Base):
     __tablename__ = "answers"
