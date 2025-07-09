@@ -47,7 +47,7 @@ class AnswerRepository(ABC):
         pass
 
     @abstractmethod
-    def get_all_tests(self) -> List[Test]:
+    def get_all_answers(self) -> List[Answer]:
         """Получить все ответы"""
         pass
 

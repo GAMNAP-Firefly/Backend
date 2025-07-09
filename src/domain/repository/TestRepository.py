@@ -7,7 +7,7 @@ from src.domain.entity.Test import Test
 class TestRepository(ABC):
     @abstractmethod
     def add_test(self, test: Test) -> None:
-        """Удалить тест"""
+        """Добавить тест"""
 
     @abstractmethod
     def get_test(self, test_id) -> Test:
