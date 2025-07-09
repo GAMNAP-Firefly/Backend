@@ -13,7 +13,7 @@ class FinishTestUseCase:
         self.answer_repo = answer_repo
         self.category_repo = category_repo
 
-    def execute(self, result_id: int) -> list[CategoryScoreDTO]:
+    async def execute(self, result_id: int) -> list[CategoryScoreDTO]:
         """
         Выполняет use case.
 
@@ -21,15 +21,15 @@ class FinishTestUseCase:
         :return: Список DTO с результатами по каждой категории.
         """
         # 1. Получаем все необходимые данные из репозиториев
-        result = self.result_repo.get_result_by_id(result_id)
-        answers = self.answer_repo.get_answers_by_result(result_id)
+        result = await self.result_repo.get_result_by_id(result_id)
+        answers = await self.answer_repo.get_answers_by_result(result_id)
         
         # 2. Выполняем бизнес-логику (подсчет очков)
         scores = ScoringService().calculate_scores(answers)
 
         # 3. Собираем данные для DTO (имена категорий)
         category_ids = list(scores.keys())
-        categories = self.category_repo.get_categories_by_ids(category_ids)
+        categories = await self.category_repo.get_categories_by_ids(category_ids)
         category_map = {c.id: c.name for c in categories}
 
         # 4. Обновляем и сохраняем сущность со всеми изменениями
@@ -41,7 +41,7 @@ class FinishTestUseCase:
         # Анализ генерируется на основе `scores`, передаётся в GPT
         result.set_interpretation("[Анализ будет добавлен позже]")
 
-        self.result_repo.edit_result_by_id(result_id, result)
+        await self.result_repo.edit_result_by_id(result_id, result)
         
         # 5. Возвращаем готовый DTO
         return [

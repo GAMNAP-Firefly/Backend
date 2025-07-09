@@ -1,5 +1,126 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from infrastructure.config.settings import settings
+from infrastructure.db.base import Base
+from infrastructure.db.database import engine
+from infrastructure.logging import setup_logging, get_logger
+from presentation.api.answer_api import router as answer_router
+from presentation.api.answered_question_api import router as answered_question_router
+from presentation.api.candidate_analysis_api import router as candidate_analysis_router
+from presentation.api.finish_test_api import router as finish_test_router
+from presentation.api.hr_results_api import router as hr_results_router
+from presentation.api.question_api import router as question_router
+from presentation.api.test_api import router as test_router
+from presentation.api.test_list_api import router as test_list_router
 
-app = FastAPI(title=settings.app_name, debug=settings.debug)
+app = FastAPI(
+    title=settings.app_name,
+    description="API для системы тестирования Fittin",
+    version="1.0.0",
+    debug=settings.debug
+)
+
+# Добавляем CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=settings.cors_allow_credentials,
+    allow_methods=settings.cors_allow_methods,
+    allow_headers=settings.cors_allow_headers,
+)
+
+
+# Обработка ошибок валидации
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={
+            "detail": "Ошибка валидации данных",
+            "errors": exc.errors()
+        }
+    )
+
+
+# Обработка HTTP ошибок
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "detail": exc.detail,
+            "status_code": exc.status_code
+        }
+    )
+
+
+# Обработка общих исключений
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": "Внутренняя ошибка сервера",
+            "error": str(exc) if settings.debug else "Произошла ошибка"
+        }
+    )
+
+
+# События жизненного цикла приложения
+@app.on_event("startup")
+async def startup_event():
+    """Инициализация при запуске приложения."""
+    # Настраиваем логирование
+    setup_logging()
+    logger = get_logger(__name__)
+
+    # Создаем таблицы в базе данных
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    logger.info(f"🚀 {settings.app_name} запущен!")
+    print(f"🚀 {settings.app_name} запущен!")
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Очистка при завершении приложения."""
+    logger = get_logger(__name__)
+    await engine.dispose()
+    logger.info(f"👋 {settings.app_name} остановлен!")
+    print(f"👋 {settings.app_name} остановлен!")
+
+
+# Подключаем роутеры
+app.include_router(test_router, prefix="/api/v1", tags=["Тесты"])
+app.include_router(answer_router, prefix="/api/v1", tags=["Ответы"])
+app.include_router(question_router, prefix="/api/v1", tags=["Вопросы"])
+app.include_router(answered_question_router, prefix="/api/v1", tags=["Отвеченные вопросы"])
+app.include_router(finish_test_router, prefix="/api/v1", tags=["Завершение тестов"])
+app.include_router(candidate_analysis_router, prefix="/api/v1", tags=["Анализ кандидатов"])
+app.include_router(test_list_router, prefix="/api/v1", tags=["Список тестов"])
+app.include_router(hr_results_router, prefix="/api/v1", tags=["HR результаты"])
+
+
+@app.get("/")
+def root():
+    return {
+        "message": f"Добро пожаловать в {settings.app_name}!",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "redoc": "/redoc"
+    }
+
+
+@app.get("/health")
+def health_check():
+    """Эндпоинт для проверки здоровья приложения."""
+    return {
+        "status": "healthy",
+        "app_name": settings.app_name,
+        "debug": settings.debug
+    }

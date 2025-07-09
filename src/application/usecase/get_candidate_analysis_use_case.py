@@ -4,8 +4,8 @@ class GetCandidateAnalysisUseCase:
     def __init__(self, result_repo):
         self.result_repo = result_repo
 
-    def execute(self, link_token: str) -> CandidateAnalysisDTO:
-        result = self.result_repo.get_result_by_token(link_token)
+    async def execute(self, link_token: str) -> CandidateAnalysisDTO:
+        result = await self.result_repo.get_result_by_token(link_token)
 
         duration = (result.end_time - result.start_time).total_seconds() / 60 if result.end_time else 0
 

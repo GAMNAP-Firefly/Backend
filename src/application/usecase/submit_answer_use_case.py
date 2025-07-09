@@ -12,7 +12,7 @@ class SubmitAnswerUseCase:
         self.result_repo = result_repo
         self.user_repo = user_repo
 
-    def execute(self, user_id: int, question_id: int, variant_id: int, result_id: int):
+    async def execute(self, user_id: int, question_id: int, variant_id: int, result_id: int):
         """
         Выполняет use case.
 
@@ -22,10 +22,10 @@ class SubmitAnswerUseCase:
         :param result_id: ID текущей сессии прохождения теста.
         """
         # 1. Получаем все необходимые сущности
-        user = self.user_repo.get_user(user_id)
-        question = self.question_repo.get_question(question_id)
-        variant = self.variant_repo.get_variant(variant_id)
-        result = self.result_repo.get_result_by_id(result_id)
+        user = await self.user_repo.get_user(user_id)
+        question = await self.question_repo.get_question(question_id)
+        variant = await self.variant_repo.get_variant(variant_id)
+        result = await self.result_repo.get_result_by_id(result_id)
 
         # 2. Создаем сущность Answer
         answer_to_save = Answer(
@@ -36,4 +36,4 @@ class SubmitAnswerUseCase:
         )
 
         # 3. Передаем ее в репозиторий, который сам решает, создать или обновить запись
-        self.answer_repo.save_answer(answer_to_save) 
+        await self.answer_repo.save_answer(answer_to_save) 

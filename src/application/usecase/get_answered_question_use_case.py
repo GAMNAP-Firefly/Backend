@@ -11,7 +11,7 @@ class GetAnsweredQuestionUseCase:
         self.question_repo = question_repo
         self.variant_repo = variant_repo
 
-    def execute(self, user_id: int, test_id: int, question_id: int) -> QuestionDTO:
+    async def execute(self, user_id: int, test_id: int, question_id: int) -> QuestionDTO:
         """
         Выполняет use case.
 
@@ -22,8 +22,8 @@ class GetAnsweredQuestionUseCase:
         :raises Exception: Если вопрос с таким ID не найден в тесте.
         """
         # 1. Получаем все вопросы и все ответы для теста одним запросом каждый
-        all_questions = self.question_repo.get_test_questions(test_id)
-        all_answers = self.answer_repo.get_user_answers_for_test(user_id, test_id)
+        all_questions = await self.question_repo.get_test_questions(test_id)
+        all_answers = await self.answer_repo.get_user_answers_for_test(user_id, test_id)
 
         # 2. Находим нужный вопрос и его индекс в памяти
         question_tuple = next(((i, q) for i, q in enumerate(all_questions, 1) if q.id == question_id), None)
@@ -36,7 +36,7 @@ class GetAnsweredQuestionUseCase:
         selected_variant_id = answer.variant.id if answer else None
 
         # 4. Получаем варианты для вопроса
-        variants = self.variant_repo.get_variants_by_question_id(question_id)
+        variants = await self.variant_repo.get_variants_by_question_id(question_id)
         variant_dtos = [
             VariantDTO(
                 id=v.id,
