@@ -10,9 +10,8 @@ def generate_sql_seed():
     """
     # Определяем пути
     script_dir = os.path.dirname(__file__)
-    project_root = os.path.abspath(os.path.join(script_dir, '..', '..', '..', '..', '..'))
-    
-    file_path = os.path.join(project_root, 'test_data.xlsx')
+
+    file_path = './src/infrastructure/db/migrations/seeders/test_data.xlsx'
     output_sql_file = os.path.join(script_dir, 'seed.sql')
 
     if not os.path.exists(file_path):
