@@ -24,8 +24,6 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY . .
 
-RUN git checkout develop
-
 RUN chmod +x start.sh
 ENTRYPOINT ["/start.sh"]
 # command: gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 src.main:app
