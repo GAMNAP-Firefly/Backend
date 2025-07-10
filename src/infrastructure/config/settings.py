@@ -4,6 +4,7 @@ class Settings(BaseSettings):
     app_name: str = "Fittest"
     debug: bool = True
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/fittest"
+    alembic_database_url: str = "postgresql+psycopg2://postgres:postgres@localhost:5432/fittest"
     secret_key: str = "supersecretkey"
     
     # Настройки логирования

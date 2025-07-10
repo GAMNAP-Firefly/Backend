@@ -78,9 +78,9 @@ async def startup_event():
     setup_logging()
     logger = get_logger(__name__)
 
-    # Создаем таблицы в базе данных
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    # # Создаем таблицы в базе данных
+    # async with engine.begin() as conn:
+    #     await conn.run_sync(Base.metadata.create_all)
 
     logger.info(f"🚀 {settings.app_name} запущен!")
     print(f"🚀 {settings.app_name} запущен!")
