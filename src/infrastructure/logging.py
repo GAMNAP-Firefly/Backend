@@ -1,7 +1,7 @@
 import logging
 import sys
 from typing import Optional
-from infrastructure.config.settings import settings
+from src.infrastructure.config.settings import settings
 
 def setup_logging(log_level: Optional[str] = None) -> None:
     """

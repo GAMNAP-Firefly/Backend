@@ -4,18 +4,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from infrastructure.config.settings import settings
-from infrastructure.db.base import Base
-from infrastructure.db.database import engine
-from infrastructure.logging import setup_logging, get_logger
-from presentation.api.answer_api import router as answer_router
-from presentation.api.answered_question_api import router as answered_question_router
-from presentation.api.candidate_analysis_api import router as candidate_analysis_router
-from presentation.api.finish_test_api import router as finish_test_router
-from presentation.api.hr_results_api import router as hr_results_router
-from presentation.api.question_api import router as question_router
-from presentation.api.test_api import router as test_router
-from presentation.api.test_list_api import router as test_list_router
+from src.infrastructure.config.settings import settings
+from src.infrastructure.db.base import Base
+from src.infrastructure.db.database import engine
+from src.infrastructure.logging import setup_logging, get_logger
+from src.presentation.api.answer_api import router as answer_router
+from src.presentation.api.answered_question_api import router as answered_question_router
+from src.presentation.api.candidate_analysis_api import router as candidate_analysis_router
+from src.presentation.api.finish_test_api import router as finish_test_router
+from src.presentation.api.hr_results_api import router as hr_results_router
+from src.presentation.api.question_api import router as question_router
+from src.presentation.api.test_api import router as test_router
+from src.presentation.api.test_list_api import router as test_list_router
 
 app = FastAPI(
     title=settings.app_name,
