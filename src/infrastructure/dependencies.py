@@ -2,21 +2,21 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from infrastructure.db.database import get_async_session
-from infrastructure.db.repositories.SQLUserRepository import SQLUserRepository
-from infrastructure.db.repositories.SQLTestRepository import SQLTestRepository
-from infrastructure.db.repositories.SQLQuestionRepository import SQLQuestionRepository
-from infrastructure.db.repositories.SQLAnswerRepository import SQLAnswerRepository
-from infrastructure.db.repositories.SQLResultRepository import SQLResultRepository
-from infrastructure.db.repositories.SQLCategoryRepository import SQLCategoryRepository
-from infrastructure.db.repositories.SQLVariantRepository import SQLVariantRepository
-from domain.repository.UserRepository import UserRepository
-from domain.repository.TestRepository import TestRepository
-from domain.repository.QuestionRepository import QuestionRepository
-from domain.repository.AnswerRepository import AnswerRepository
-from domain.repository.ResultRepository import ResultRepository
-from domain.repository.CategoryRepository import CategoryRepository
-from domain.repository.VariantRepository import VariantRepository
+from src.infrastructure.db.database import get_async_session
+from src.infrastructure.db.repositories.SQLUserRepository import SQLUserRepository
+from src.infrastructure.db.repositories.SQLTestRepository import SQLTestRepository
+from src.infrastructure.db.repositories.SQLQuestionRepository import SQLQuestionRepository
+from src.infrastructure.db.repositories.SQLAnswerRepository import SQLAnswerRepository
+from src.infrastructure.db.repositories.SQLResultRepository import SQLResultRepository
+from src.infrastructure.db.repositories.SQLCategoryRepository import SQLCategoryRepository
+from src.infrastructure.db.repositories.SQLVariantRepository import SQLVariantRepository
+from src.domain.repository.UserRepository import UserRepository
+from src.domain.repository.TestRepository import TestRepository
+from src.domain.repository.QuestionRepository import QuestionRepository
+from src.domain.repository.AnswerRepository import AnswerRepository
+from src.domain.repository.ResultRepository import ResultRepository
+from src.domain.repository.CategoryRepository import CategoryRepository
+from src.domain.repository.VariantRepository import VariantRepository
 
 
 # Dependency для получения репозиториев

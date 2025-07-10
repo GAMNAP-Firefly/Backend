@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from infrastructure.services.jwt_service import jwt_service
+from src.infrastructure.services.jwt_service import jwt_service
 
 # Схема безопасности для JWT токенов
 security = HTTPBearer()

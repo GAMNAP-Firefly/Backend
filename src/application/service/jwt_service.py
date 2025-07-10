@@ -1,6 +1,6 @@
 import jwt
 from fastapi import Request, HTTPException, status, Depends
-from infrastructure.config.settings import settings
+from src.infrastructure.config.settings import settings
 
 SECRET_KEY = settings.secret_key
 ALGORITHM = "HS256"
