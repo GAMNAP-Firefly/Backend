@@ -23,5 +23,8 @@ psql -h "$DB_HOST" -U "$DB_USER" -tc "SELECT 1 FROM pg_database WHERE datname = 
 # Применяем миграции Alembic
 alembic upgrade head
 
+# АХАХАХАХАХААХХАХАХА АХАХАХАХАХХАХА АХАХАХАХАХАХАХАХАХ
+python ./src/infrastructure/db/migrations/seeders/generate_seed_sql.py
+
 # Запускаем приложение
 gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 src.main:app
