@@ -191,6 +191,15 @@ class SQLResultRepository(ResultRepository):
             )
         raise ValueError("Result not found")
 
+    async def get_test_id_by_token(self, link_token: str) -> int:
+        """Получить ID теста по токену-ссылке."""
+        stmt = select(ResultModel.test_id).where(ResultModel.link_token == link_token)
+        result = await self.session.execute(stmt)
+        test_id = result.scalar_one_or_none()
+        if test_id:
+            return test_id
+        raise ValueError("Result not found")
+
     async def get_all_finished(self) -> List[Result]:
         """Получить все завершенные результаты."""
         stmt = select(ResultModel).where(ResultModel.status == "finished")

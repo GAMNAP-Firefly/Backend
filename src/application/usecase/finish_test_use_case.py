@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 from src.application.service.scoring_service import ScoringService
 from src.application.dto.CategoryScoreDTO import CategoryScoreDTO
+from src.application.dto.HRShareLinkDTO import HRShareLinkDTO
 
 class FinishTestUseCase:
     """
@@ -13,12 +14,12 @@ class FinishTestUseCase:
         self.answer_repo = answer_repo
         self.category_repo = category_repo
 
-    async def execute(self, result_id: int) -> list[CategoryScoreDTO]:
+    async def execute(self, result_id: int) -> tuple[list[CategoryScoreDTO], HRShareLinkDTO]:
         """
         Выполняет use case.
 
         :param result_id: ID сессии (Result), которую нужно завершить.
-        :return: Список DTO с результатами по каждой категории.
+        :return: Кортеж (список DTO с результатами по каждой категории, DTO ссылки для HR).
         """
         # 1. Получаем все необходимые данные из репозиториев
         result = await self.result_repo.get_result_by_id(result_id)
@@ -32,10 +33,13 @@ class FinishTestUseCase:
         categories = await self.category_repo.get_categories_by_ids(category_ids)
         category_map = {c.id: c.name for c in categories}
 
-        # 4. Обновляем и сохраняем сущность со всеми изменениями
+        # 4. Генерируем код для HR
+        share_code = uuid.uuid4().hex[:8].upper()
+
+        # 5. Обновляем и сохраняем сущность со всеми изменениями
         result.status = "finished"
         result.end_time = datetime.now()
-        result.assign_link_token(uuid.uuid4().hex[:8])
+        result.assign_link_token(share_code)
 
         # Здесь будет место вызова LLM
         # Анализ генерируется на основе `scores`, передаётся в GPT
@@ -43,10 +47,15 @@ class FinishTestUseCase:
 
         await self.result_repo.edit_result_by_id(result_id, result)
         
-        # 5. Возвращаем готовый DTO
-        return [
+        # 6. Создаем DTO для ссылки HR
+        hr_share_link = HRShareLinkDTO(share_code=share_code)
+        
+        # 7. Возвращаем готовые DTO
+        category_scores = [
             CategoryScoreDTO(
                 category_name=category_map.get(cid, "Unknown Category"),
                 score=score
             ) for cid, score in scores.items()
-        ] 
+        ]
+        
+        return category_scores, hr_share_link 

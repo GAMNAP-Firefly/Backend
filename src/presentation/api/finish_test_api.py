@@ -7,7 +7,7 @@ from src.infrastructure.db.repositories.SQLAnswerRepository import SQLAnswerRepo
 from src.infrastructure.db.repositories.SQLCategoryRepository import SQLCategoryRepository
 from src.infrastructure.db.repositories.SQLResultRepository import SQLResultRepository
 from src.presentation.schemas.requests.finish_test_request import FinishTestRequest
-from src.presentation.schemas.responses.finish_test_response import CategoryScoreResponse, FinishTestResponse
+from src.presentation.schemas.responses.finish_test_response import CategoryScoreResponse, FinishTestResponse, HRShareLinkResponse
 
 router = APIRouter(prefix="/results", tags=["Results"])
 
@@ -23,8 +23,11 @@ async def finish_test(
         category_repo=SQLCategoryRepository(session),
     )
     try:
-        dtos = await use_case.execute(result_id=request.result_id)
+        category_scores, hr_share_link = await use_case.execute(result_id=request.result_id)
+        
         return FinishTestResponse(
-            results=[CategoryScoreResponse(category_name=dto.category_name, score=dto.score) for dto in dtos])
+            results=[CategoryScoreResponse(category_name=dto.category_name, score=dto.score) for dto in category_scores],
+            share_link=HRShareLinkResponse(share_code=hr_share_link.share_code)
+        )
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
