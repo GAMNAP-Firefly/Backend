@@ -36,4 +36,4 @@ class SubmitAnswerUseCase:
         )
 
         # 3. Передаем ее в репозиторий, который сам решает, создать или обновить запись
-        await self.answer_repo.save_answer(answer_to_save) 
+        await self.answer_repo.save_answer(answer_to_save)

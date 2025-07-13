@@ -19,20 +19,36 @@ class SQLAnswerRepository(AnswerRepository):
 
     async def save_answer(self, answer: Answer) -> Answer:
         """Сохраняет ответ (создает новый или обновляет существующий) и возвращает созданную сущность."""
-        db_answer = AnswerModel(
-            question_id=answer.question.id,
-            user_id=answer.user.id,
-            variant_id=answer.variant.id,
-            result_id=answer.result.id
+        stmt = select(AnswerModel).where(
+            AnswerModel.question_id == answer.question.id,
+            AnswerModel.user_id == answer.user.id,
+            AnswerModel.result_id == answer.result.id
         )
-        self.session.add(db_answer)
+        result = await self.session.execute(stmt)
+        db_answer = result.scalar_one_or_none()
+
+        if db_answer:
+            # Update existing answer
+            db_answer.variant_id = answer.variant.id
+        else:
+            # Insert new answer
+            db_answer = AnswerModel(
+                question_id=answer.question.id,
+                user_id=answer.user.id,
+                variant_id=answer.variant.id,
+                result_id=answer.result.id
+            )
+            self.session.add(db_answer)
+
         await self.session.commit()
-        await self.session.refresh(db_answer)  # Получаем данные с БД (включая автоинкремент)
+        await self.session.refresh(db_answer)
         return Answer(
-            question=Question(id=db_answer.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
+            question=Question(id=db_answer.question_id, test=Test(id=0, name="", description=""), text="",
+                              scoring_rules={}),
             user=User(id=db_answer.user_id),
             variant=Variant(id=db_answer.variant_id, var_text=""),
-            result=Result(id=db_answer.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
+            result=Result(id=db_answer.result_id, user=User(id=0), test=Test(id=0, name="", description=""),
+                          start_time=None, end_time=None, status="")
         )
 
     async def get_answer(self, user_id: int, question_id: int) -> Answer:
