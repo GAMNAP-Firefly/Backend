@@ -9,11 +9,13 @@ class SQLCategoryRepository(CategoryRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def add_category(self, category: Category) -> None:
-        """Добавить категорию."""
+    async def add_category(self, category: Category) -> Category:
+        """Добавить категорию и вернуть созданную сущность."""
         db_category = CategoryModel(id=category.id, name=category.name)
         self.session.add(db_category)
         await self.session.commit()
+        await self.session.refresh(db_category)  # Получаем данные с БД (включая автоинкремент)
+        return Category(id=db_category.id, name=db_category.name)
 
     async def get_category(self, category_id) -> Category:
         """Получить категорию с id."""

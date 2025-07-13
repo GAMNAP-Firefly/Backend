@@ -6,7 +6,7 @@ from src.domain.entity.User import User
 
 class UserRepository(ABC):
     @abstractmethod
-    def add_user(self, user: User):
+    def add_user(self) -> User:
         """Добавить пользователя"""
         pass
 

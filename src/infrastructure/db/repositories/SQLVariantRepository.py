@@ -9,11 +9,13 @@ class SQLVariantRepository(VariantRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def add_variant(self, variant: Variant) -> None:
-        """Добавить вариант."""
+    async def add_variant(self, variant: Variant) -> Variant:
+        """Добавить вариант и вернуть созданную сущность."""
         db_variant = VariantModel(id=variant.id, var_text=variant.var_text)
         self.session.add(db_variant)
         await self.session.commit()
+        await self.session.refresh(db_variant)  # Получаем данные с БД (включая автоинкремент)
+        return Variant(id=db_variant.id, var_text=db_variant.var_text)
 
     async def get_variant(self, variant_id: int) -> Variant:
         """Получить вариант с id."""

@@ -6,8 +6,8 @@ from src.domain.entity.Result import Result
 
 class ResultRepository(ABC):
     @abstractmethod
-    def add_result(self, result: Result) -> None:
-        """Добавить результат"""
+    def add_result(self, result: Result) -> Result:
+        """Добавить результат и вернуть созданную сущность"""
         pass
 
     @abstractmethod

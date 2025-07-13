@@ -1,19 +1,24 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from src.domain.repository.UserRepository import UserRepository
-from src.domain.entity.User import User
-from src.infrastructure.db.models.user_model import UserModel
-from sqlalchemy import select
 from typing import List
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.domain.entity.User import User
+from src.domain.repository.UserRepository import UserRepository
+from src.infrastructure.db.models.user_model import UserModel
+
 
 class SQLUserRepository(UserRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def add_user(self, user: User):
-        """Добавить пользователя."""
-        db_user = UserModel(id=user.id)
+    async def add_user(self) -> User:
+        """Добавить пользователя и вернуть созданную сущность."""
+        db_user = UserModel()
         self.session.add(db_user)
         await self.session.commit()
+        user_id = await self.session.refresh(db_user)  # Получаем данные с БД (включая автоинкремент)
+        return User(id=user_id)
 
     async def get_user(self, user_id):
         """Получить пользователя с id."""
