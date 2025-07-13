@@ -171,6 +171,6 @@ def generate_sql_seed(file_path, output_sql_file='seed.sql'):
 
 
 if __name__ == '__main__':
-    excel_path = './test_data.xlsx'   # путь к твоему XLSX
-    output_sql = './seed.sql'         # путь, куда сохранить SQL
+    excel_path = './src/infrastructure/db/migrations/seeders/test_data.xlsx'   # путь к твоему XLSX
+    output_sql = './src/infrastructure/db/migrations/seeders/seed.sql'         # путь, куда сохранить SQL
     generate_sql_seed(excel_path, output_sql)
