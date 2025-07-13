@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List
+
 from src.application.dto.VariantDTO import VariantDTO
+
 
 @dataclass
 class QuestionDTO:
@@ -9,4 +11,4 @@ class QuestionDTO:
     index: int
     total: int
     progress_percent: float
-    variants: List[VariantDTO] 
+    variants: List[VariantDTO]

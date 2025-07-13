@@ -11,7 +11,7 @@ from src.infrastructure.db.repositories.SQLUserRepository import SQLUserReposito
 from src.infrastructure.db.repositories.SQLVariantRepository import SQLVariantRepository
 from src.presentation.schemas.requests.answer_request import SubmitAnswerRequest
 
-router = APIRouter(prefix="/answers", tags=["Answers"])
+router = APIRouter(prefix="/answer", tags=["Ответы"])
 
 
 @router.post("/submit", status_code=status.HTTP_204_NO_CONTENT)

@@ -1,15 +1,16 @@
+from typing import List
+
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.entity.Test import Test
-from src.domain.repository.AnswerRepository import AnswerRepository
 from src.domain.entity.Answer import Answer
 from src.domain.entity.Question import Question
+from src.domain.entity.Result import Result
+from src.domain.entity.Test import Test
 from src.domain.entity.User import User
 from src.domain.entity.Variant import Variant
-from src.domain.entity.Result import Result
+from src.domain.repository.AnswerRepository import AnswerRepository
 from src.infrastructure.db.models.answer_model import AnswerModel
-from sqlalchemy import select
-from typing import List
 from src.infrastructure.db.models.result_model import ResultModel
 
 
@@ -61,10 +62,12 @@ class SQLAnswerRepository(AnswerRepository):
         db_answer = result.scalar_one_or_none()
         if db_answer:
             return Answer(
-                question=Question(id=db_answer.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
+                question=Question(id=db_answer.question_id, test=Test(id=0, name="", description=""), text="",
+                                  scoring_rules={}),
                 user=User(id=db_answer.user_id),
                 variant=Variant(id=db_answer.variant_id, var_text=""),
-                result=Result(id=db_answer.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
+                result=Result(id=db_answer.result_id, user=User(id=0), test=Test(id=0, name="", description=""),
+                              start_time=None, end_time=None, status="")
             )
         raise ValueError("Answer not found")
 
@@ -75,10 +78,12 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="",
+                                  scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""),
+                              start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -89,10 +94,12 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="",
+                                  scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""),
+                              start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -103,10 +110,12 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="",
+                                  scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""),
+                              start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -117,10 +126,28 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="",
+                                  scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""),
+                              start_time=None, end_time=None, status="")
+            ) for a in db_answers
+        ]
+
+    async def get_answers_by_variant_and_user(self, variant_id: int, user_id: int) -> List[Answer]:
+        """Получить все ответы от пользователя с вариантом с id."""
+        stmt = select(AnswerModel).where((AnswerModel.variant_id == variant_id) & (AnswerModel.user_id == user_id))
+        result = await self.session.execute(stmt)
+        db_answers = result.scalars().all()
+        return [
+            Answer(
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="",
+                                  scoring_rules={}),
+                user=User(id=a.user_id),
+                variant=Variant(id=a.variant_id, var_text=""),
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""),
+                              start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -145,10 +172,12 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="",
+                                  scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""),
+                              start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]
 
@@ -164,9 +193,11 @@ class SQLAnswerRepository(AnswerRepository):
         db_answers = result.scalars().all()
         return [
             Answer(
-                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
+                question=Question(id=a.question_id, test=Test(id=0, name="", description=""), text="",
+                                  scoring_rules={}),
                 user=User(id=a.user_id),
                 variant=Variant(id=a.variant_id, var_text=""),
-                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
+                result=Result(id=a.result_id, user=User(id=0), test=Test(id=0, name="", description=""),
+                              start_time=None, end_time=None, status="")
             ) for a in db_answers
         ]

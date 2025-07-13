@@ -9,7 +9,7 @@ from src.infrastructure.db.repositories.SQLResultRepository import SQLResultRepo
 from src.presentation.schemas.requests.finish_test_request import FinishTestRequest
 from src.presentation.schemas.responses.finish_test_response import CategoryScoreResponse, FinishTestResponse, HRShareLinkResponse
 
-router = APIRouter(prefix="/results", tags=["Results"])
+router = APIRouter(prefix="/finish-test", tags=["Завершение тестов"])
 
 
 @router.post("/finish", response_model=FinishTestResponse, status_code=status.HTTP_200_OK)

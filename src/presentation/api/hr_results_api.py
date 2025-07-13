@@ -7,7 +7,7 @@ from src.infrastructure.db.repositories.SQLResultRepository import SQLResultRepo
 from src.presentation.schemas.requests.hr_results_request import HRResultsRequest
 from src.presentation.schemas.responses.hr_results_response import HRResultsListResponse, HRResultRowResponse
 
-router = APIRouter(prefix="/hr", tags=["HRResults"])
+router = APIRouter(prefix="/hr-results", tags=["HR результаты"])
 
 
 @router.post("/results", response_model=HRResultsListResponse, status_code=status.HTTP_200_OK)

@@ -10,7 +10,7 @@ from src.infrastructure.db.repositories.SQLTestRepository import SQLTestReposito
 from src.presentation.schemas.requests.hr_results_by_link_request import HRResultsByLinkRequest
 from src.presentation.schemas.responses.hr_results_by_link_response import HRResultsByLinkResponse
 
-router = APIRouter(prefix="/hr/share", tags=["HR Results by Link"])
+router = APIRouter(prefix="/hr-results-by-link", tags=["HR результаты по ссылке"])
 
 
 @router.post("/results", response_model=HRResultsByLinkResponse, status_code=status.HTTP_200_OK)

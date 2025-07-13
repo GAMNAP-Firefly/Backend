@@ -42,6 +42,11 @@ class AnswerRepository(ABC):
         pass
 
     @abstractmethod
+    async def get_answers_by_variant_and_user(self, variant_id: int, user_id: int) -> List[Answer]:
+        """Получить все ответы с вариантом с id"""
+        pass
+
+    @abstractmethod
     async def delete_answer(self, question_id: int, user_id: int) -> None:
         """Удалить ответ пользователя с id на вопрос с id"""
         pass

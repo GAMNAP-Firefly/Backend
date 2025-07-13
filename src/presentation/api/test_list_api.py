@@ -9,7 +9,7 @@ from src.infrastructure.db.database import get_async_session
 from src.infrastructure.db.repositories.SQLTestRepository import SQLTestRepository
 from src.presentation.schemas.responses.test_list_response import TestListResponse, TestResponse
 
-router = APIRouter(prefix="/tests", tags=["Tests"])
+router = APIRouter(prefix="/test", tags=["Список тестов"])
 
 
 @router.get("/list", response_model=TestListResponse, status_code=status.HTTP_200_OK)
