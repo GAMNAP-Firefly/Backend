@@ -1,10 +1,13 @@
+from typing import List, Optional
+
 from pydantic import BaseModel
-from typing import List
+
 
 class TestResponse(BaseModel):
     id: int
     name: str
-    description: str
+    description: Optional[str]
+
 
 class TestListResponse(BaseModel):
-    tests: List[TestResponse] 
+    tests: List[TestResponse]

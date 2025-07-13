@@ -1,11 +1,14 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from src.domain.repository.ResultRepository import ResultRepository
-from src.domain.entity.Result import Result
-from src.domain.entity.User import User
-from src.domain.entity.Test import Test
-from src.infrastructure.db.models.result_model import ResultModel
-from sqlalchemy import select
 from typing import List
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.domain.entity.Result import Result
+from src.domain.entity.Test import Test
+from src.domain.entity.User import User
+from src.domain.repository.ResultRepository import ResultRepository
+from src.infrastructure.db.models.result_model import ResultModel
+
 
 class SQLResultRepository(ResultRepository):
     def __init__(self, session: AsyncSession):

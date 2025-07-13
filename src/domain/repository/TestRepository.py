@@ -6,25 +6,26 @@ from src.domain.entity.Test import Test
 
 class TestRepository(ABC):
     @abstractmethod
-    def add_test(self, test: Test) -> Test:
+    async def add_test(self, test: Test) -> Test:
         """Добавить тест и вернуть созданную сущность"""
+        pass
 
     @abstractmethod
-    def get_test(self, test_id) -> Test:
+    async def get_test(self, test_id) -> Test:
         """Получить тест с id"""
         pass
 
     @abstractmethod
-    def delete_test(self, test_id) -> None:
+    async def delete_test(self, test_id) -> None:
         """Удалить тест с id"""
         pass
 
     @abstractmethod
-    def edit_test(self, test_id, test: Test) -> None:
+    async def edit_test(self, test_id, test: Test) -> None:
         """Изменить тест с id"""
         pass
 
     @abstractmethod
-    def get_all_tests(self) -> List[Test]:
+    async def get_all_tests(self) -> List[Test]:
         """Получить все тесты"""
         pass
