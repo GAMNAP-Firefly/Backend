@@ -1,9 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.domain.repository.VariantRepository import VariantRepository
 from src.domain.entity.Variant import Variant
+from src.infrastructure.db.models.question_model import QuestionModel
 from src.infrastructure.db.models.variant_model import VariantModel
 from sqlalchemy import select
 from typing import List
+
 
 class SQLVariantRepository(VariantRepository):
     def __init__(self, session: AsyncSession):
@@ -48,3 +50,13 @@ class SQLVariantRepository(VariantRepository):
             await self.session.commit()
         else:
             raise ValueError("Variant not found")
+
+    async def get_variants_by_question_id(self, question_id: int) -> List[Variant]:
+        """Получить варианты ответов у вопроса с id"""
+        question_variants = []
+        db_question = await self.session.get(QuestionModel, question_id)
+        scoring_rules = db_question.scoring_rules
+        for variant_id in scoring_rules:
+            question_variants.append(await self.get_variant(int(variant_id)))
+
+        return question_variants
