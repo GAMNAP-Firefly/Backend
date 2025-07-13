@@ -29,3 +29,8 @@ class VariantRepository(ABC):
     async def edit_variant(self, variant_id: int, variant: Variant) -> None:
         """Изменить вариант"""
         pass
+
+    @abstractmethod
+    async def get_variants_by_question_id(self, question_id: int) -> List[Variant]:
+        """Получить варианты ответов у вопроса с id"""
+        pass

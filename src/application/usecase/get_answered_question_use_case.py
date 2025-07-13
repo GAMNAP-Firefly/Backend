@@ -36,7 +36,7 @@ class GetAnsweredQuestionUseCase:
         selected_variant_id = answer.variant.id if answer else None
 
         # 4. Получаем варианты для вопроса
-        variants = await self.variant_repo.get_variants_by_question_id(question_id)
+        variants = await self.variant_repo.get_variants_by_question_id(question_id) ###awdawd
         variant_dtos = [
             VariantDTO(
                 id=v.id,

@@ -211,3 +211,8 @@ class SQLResultRepository(ResultRepository):
                 interpretation=r.interpretation
             ) for r in db_results
         ]
+
+    async def get_test_id_by_token(self, link_token: str) -> int:
+        """Получить ID теста по токену-ссылке."""
+        result = await self.get_result_by_token(link_token)
+        return result.test.id
