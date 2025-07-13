@@ -6,8 +6,8 @@ from src.domain.entity.Category import Category
 
 class CategoryRepository(ABC):
     @abstractmethod
-    def add_category(self, category: Category) -> None:
-        """Добавить категорию"""
+    def add_category(self, category: Category) -> Category:
+        """Добавить категорию и вернуть созданную сущность"""
         pass
 
     @abstractmethod

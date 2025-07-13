@@ -6,8 +6,8 @@ from src.domain.entity.Variant import Variant
 
 class VariantRepository(ABC):
     @abstractmethod
-    def add_variant(self, variant: Variant) -> None:
-        """Добавить тест"""
+    def add_variant(self, variant: Variant) -> Variant:
+        """Добавить вариант и вернуть созданную сущность"""
         pass
 
     @abstractmethod

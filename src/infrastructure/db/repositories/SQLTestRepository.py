@@ -9,11 +9,13 @@ class SQLTestRepository(TestRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def add_test(self, test: Test) -> None:
-        """Добавить тест."""
+    async def add_test(self, test: Test) -> Test:
+        """Добавить тест и вернуть созданную сущность."""
         db_test = TestModel(id=test.id, name=test.name, description=test.description)
         self.session.add(db_test)
         await self.session.commit()
+        await self.session.refresh(db_test)  # Получаем данные с БД (включая автоинкремент)
+        return Test(id=db_test.id, name=db_test.name, description=db_test.description)
 
     async def get_test(self, test_id) -> Test:
         """Получить тест с id."""

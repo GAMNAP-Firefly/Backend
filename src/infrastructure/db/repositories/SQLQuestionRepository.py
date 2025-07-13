@@ -10,8 +10,8 @@ class SQLQuestionRepository(QuestionRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def add_question(self, question: Question) -> None:
-        """Добавить вопрос."""
+    async def add_question(self, question: Question) -> Question:
+        """Добавить вопрос и вернуть созданную сущность."""
         db_question = QuestionModel(
             id=question.id,
             test_id=question.test.id,
@@ -20,6 +20,13 @@ class SQLQuestionRepository(QuestionRepository):
         )
         self.session.add(db_question)
         await self.session.commit()
+        await self.session.refresh(db_question)  # Получаем данные с БД (включая автоинкремент)
+        return Question(
+            id=db_question.id,
+            test=Test(id=db_question.test_id, name="", description=""),
+            text=db_question.text,
+            scoring_rules=db_question.scoring_rules
+        )
 
     async def get_question(self, question_id) -> Question:
         """Получить вопрос с id."""
