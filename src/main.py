@@ -12,6 +12,7 @@ from src.presentation.api.answered_question_api import router as answered_questi
 from src.presentation.api.candidate_analysis_api import router as candidate_analysis_router
 from src.presentation.api.finish_test_api import router as finish_test_router
 from src.presentation.api.hr_results_api import router as hr_results_router
+from src.presentation.api.hr_results_by_link_api import router as hr_results_by_link_router
 from src.presentation.api.question_api import router as question_router
 from src.presentation.api.test_api import router as test_router
 from src.presentation.api.test_list_api import router as test_list_router
@@ -110,6 +111,7 @@ app.include_router(finish_test_router, prefix="/api/v1", tags=["Завершен
 app.include_router(candidate_analysis_router, prefix="/api/v1", tags=["Анализ кандидатов"])
 app.include_router(test_list_router, prefix="/api/v1", tags=["Список тестов"])
 app.include_router(hr_results_router, prefix="/api/v1", tags=["HR результаты"])
+app.include_router(hr_results_by_link_router, prefix="/api/v1", tags=["HR результаты по ссылке"])
 app.include_router(user_router, prefix="/api/v1", tags=["Аутентификация"])
 
 

@@ -64,3 +64,8 @@ class ResultRepository(ABC):
     def get_all_finished(self) -> List[Result]:
         """Получить все завершенные результаты."""
         pass
+
+    @abstractmethod
+    def get_test_id_by_token(self, link_token: str) -> int:
+        """Получить ID теста по токену-ссылке."""
+        pass
