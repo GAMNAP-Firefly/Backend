@@ -9,7 +9,7 @@ from src.domain.entity.User import User
 
 class AnswerRepository(ABC):
     @abstractmethod
-    def save_answer(self, answer: Answer) -> Answer:
+    async def save_answer(self, answer: Answer) -> Answer:
         """
         Сохраняет ответ (создает новый или обновляет существующий) и возвращает созданную сущность.
         Логика "create or update" (upsert) инкапсулируется здесь.
@@ -17,41 +17,41 @@ class AnswerRepository(ABC):
         pass
 
     @abstractmethod
-    def get_answer(self, user_id: int , question_id: int) -> Answer:
+    async def get_answer(self, user_id: int , question_id: int) -> Answer:
         """Получить ответ по id пользователя и id вопроса"""
         pass
 
     @abstractmethod
-    def get_user_answers(self, user_id: int) -> List[Answer]:
+    async def get_user_answers(self, user_id: int) -> List[Answer]:
         """Получить все ответы пользователя с id"""
         pass
 
     @abstractmethod
-    def get_question_answers(self, question_id: int) -> List[Answer]:
+    async def get_question_answers(self, question_id: int) -> List[Answer]:
         """Получить все ответы на вопрос c id"""
         pass
 
     @abstractmethod
-    def get_answers_by_result(self, result_id: int) -> List[Answer]:
+    async def get_answers_by_result(self, result_id: int) -> List[Answer]:
         """Получить ответы из результата с id"""
         pass
 
     @abstractmethod
-    def get_answers_by_variant(self, variant_id: int) -> List[Answer]:
+    async def get_answers_by_variant(self, variant_id: int) -> List[Answer]:
         """Получить все ответы с вариантом с id"""
         pass
 
     @abstractmethod
-    def delete_answer(self, question_id: int, user_id: int) -> None:
+    async def delete_answer(self, question_id: int, user_id: int) -> None:
         """Удалить ответ пользователя с id на вопрос с id"""
         pass
 
     @abstractmethod
-    def get_all_answers(self) -> List[Answer]:
+    async def get_all_answers(self) -> List[Answer]:
         """Получить все ответы"""
         pass
 
     @abstractmethod
-    def get_user_answers_for_test(self, user_id: int, test_id: int) -> List[Answer]:
+    async def get_user_answers_for_test(self, user_id: int, test_id: int) -> List[Answer]:
         """Получить все ответы пользователя для конкретного теста."""
         pass

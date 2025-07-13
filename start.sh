@@ -45,5 +45,5 @@ else
 fi
 # АХАХАХАХАХААХХАХАХА АХАХАХАХАХХАХА АХАХАХАХАХАХАХАХАХАХХАХАХАХАХА АХАХА
 
-# Запускаем приложение
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 src.main:app
+# Запускаем приложение с правильным логированием
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --log-level=info --access-logfile=- --error-logfile=- src.main:app

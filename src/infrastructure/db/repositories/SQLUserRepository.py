@@ -17,8 +17,8 @@ class SQLUserRepository(UserRepository):
         db_user = UserModel()
         self.session.add(db_user)
         await self.session.commit()
-        user_id = await self.session.refresh(db_user)  # Получаем данные с БД (включая автоинкремент)
-        return User(id=user_id)
+        await self.session.refresh(db_user)  # Получаем данные с БД (включая автоинкремент)
+        return User(id=db_user.id)
 
     async def get_user(self, user_id):
         """Получить пользователя с id."""

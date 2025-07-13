@@ -19,7 +19,7 @@ class JWTService:
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             return payload
-        except jwt.PyJWTError:
+        except jwt.PyJWTError as e:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
 
@@ -28,7 +28,7 @@ async def get_current_user_id(request: Request) -> int:
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing or invalid Authorization header")
-    token = auth_header.split(" ", 1)[1]
+    token = auth_header.split(" ", 1)[1].strip()
     payload = JWTService.decode_access_token(token)
     user_id = payload.get("user_id")
     if user_id is None:
