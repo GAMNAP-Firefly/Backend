@@ -3,11 +3,13 @@ from src.application.dto.StartTestResponseDTO import StartTestResponseDTO
 from src.application.mappers.question_mapper import to_question_dto
 from src.domain.entity.Result import Result
 
+
 class StartTestUseCase:
     """
     Use case для начала нового теста.
     Создает сессию прохождения теста (Result) и возвращает первый вопрос.
     """
+
     def __init__(self, result_repo, question_repo, variant_repo, user_repo, test_repo, answer_repo):
         self.result_repo = result_repo
         self.question_repo = question_repo
@@ -47,7 +49,7 @@ class StartTestUseCase:
 
         question = questions[0]
         variants = await self.variant_repo.get_variants_by_question_id(question.id)
-        
+
         # 4. Маппим данные в DTO для ответа.
         #    Количество отвеченных вопросов в начале теста всегда 0.
         question_dto = to_question_dto(
@@ -57,4 +59,4 @@ class StartTestUseCase:
             total=len(questions),
             answered=0  # Оптимизация: убираем лишний запрос к БД
         )
-        return StartTestResponseDTO(result_id=result.id, question=question_dto) 
+        return StartTestResponseDTO(result_id=result.id, question=question_dto)
