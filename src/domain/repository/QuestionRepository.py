@@ -6,8 +6,8 @@ from src.domain.entity.Question import Question
 
 class QuestionRepository(ABC):
     @abstractmethod
-    def add_question(self, question: Question) -> None:
-        """Добавить вопрос"""
+    def add_question(self, question: Question) -> Question:
+        """Добавить вопрос и вернуть созданную сущность"""
         pass
 
     @abstractmethod

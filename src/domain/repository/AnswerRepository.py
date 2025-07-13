@@ -9,9 +9,9 @@ from src.domain.entity.User import User
 
 class AnswerRepository(ABC):
     @abstractmethod
-    def save_answer(self, answer: Answer) -> None:
+    def save_answer(self, answer: Answer) -> Answer:
         """
-        Сохраняет ответ (создает новый или обновляет существующий).
+        Сохраняет ответ (создает новый или обновляет существующий) и возвращает созданную сущность.
         Логика "create or update" (upsert) инкапсулируется здесь.
         """
         pass

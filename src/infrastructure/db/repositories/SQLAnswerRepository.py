@@ -17,8 +17,8 @@ class SQLAnswerRepository(AnswerRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def save_answer(self, answer: Answer) -> None:
-        """Сохраняет ответ (создает новый или обновляет существующий)."""
+    async def save_answer(self, answer: Answer) -> Answer:
+        """Сохраняет ответ (создает новый или обновляет существующий) и возвращает созданную сущность."""
         db_answer = AnswerModel(
             question_id=answer.question.id,
             user_id=answer.user.id,
@@ -27,6 +27,13 @@ class SQLAnswerRepository(AnswerRepository):
         )
         self.session.add(db_answer)
         await self.session.commit()
+        await self.session.refresh(db_answer)  # Получаем данные с БД (включая автоинкремент)
+        return Answer(
+            question=Question(id=db_answer.question_id, test=Test(id=0, name="", description=""), text="", scoring_rules={}),
+            user=User(id=db_answer.user_id),
+            variant=Variant(id=db_answer.variant_id, var_text=""),
+            result=Result(id=db_answer.result_id, user=User(id=0), test=Test(id=0, name="", description=""), start_time=None, end_time=None, status="")
+        )
 
     async def get_answer(self, user_id: int, question_id: int) -> Answer:
         """Получить ответ по id пользователя и id вопроса."""

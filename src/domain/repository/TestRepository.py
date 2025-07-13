@@ -6,8 +6,8 @@ from src.domain.entity.Test import Test
 
 class TestRepository(ABC):
     @abstractmethod
-    def add_test(self, test: Test) -> None:
-        """Добавить тест"""
+    def add_test(self, test: Test) -> Test:
+        """Добавить тест и вернуть созданную сущность"""
 
     @abstractmethod
     def get_test(self, test_id) -> Test:

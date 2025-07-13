@@ -1,9 +1,11 @@
 import jwt
-from fastapi import Request, HTTPException, status, Depends
+from fastapi import Request, HTTPException, status
+
 from src.infrastructure.config.settings import settings
 
 SECRET_KEY = settings.secret_key
 ALGORITHM = "HS256"
+
 
 class JWTService:
     @staticmethod
@@ -20,6 +22,7 @@ class JWTService:
         except jwt.PyJWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
+
 # FastAPI dependency для получения user_id из JWT
 async def get_current_user_id(request: Request) -> int:
     auth_header = request.headers.get("Authorization")
@@ -30,4 +33,4 @@ async def get_current_user_id(request: Request) -> int:
     user_id = payload.get("user_id")
     if user_id is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload")
-    return user_id 
+    return user_id

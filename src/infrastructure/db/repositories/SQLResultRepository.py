@@ -11,8 +11,8 @@ class SQLResultRepository(ResultRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def add_result(self, result: Result) -> None:
-        """Добавить результат."""
+    async def add_result(self, result: Result) -> Result:
+        """Добавить результат и вернуть созданную сущность."""
         db_result = ResultModel(
             user_id=result.user.id,
             test_id=result.test.id,
@@ -24,6 +24,17 @@ class SQLResultRepository(ResultRepository):
         )
         self.session.add(db_result)
         await self.session.commit()
+        await self.session.refresh(db_result)  # Получаем данные с БД (включая автоинкремент)
+        return Result(
+            id=db_result.id,
+            user=User(id=db_result.user_id),
+            test=Test(id=db_result.test_id, name="", description=""),
+            start_time=db_result.start_time,
+            end_time=db_result.end_time,
+            status=db_result.status,
+            link_token=db_result.link_token,
+            interpretation=db_result.interpretation
+        )
 
     async def get_result_by_id(self, result_id: int) -> Result:
         """Получить результат с id."""
