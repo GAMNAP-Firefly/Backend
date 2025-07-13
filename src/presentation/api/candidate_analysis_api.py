@@ -6,7 +6,7 @@ from src.application.usecase.get_candidate_analysis_use_case import GetCandidate
 from src.infrastructure.db.database import get_async_session
 from src.infrastructure.db.repositories.SQLResultRepository import SQLResultRepository
 
-router = APIRouter(prefix="/analysis", tags=["CandidateAnalysis"])
+router = APIRouter(prefix="/candidate-analysis", tags=["Анализ кандидатов"])
 
 @router.post("/", response_model=CandidateAnalysisResponse, status_code=status.HTTP_200_OK)
 async def get_candidate_analysis(

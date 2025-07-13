@@ -103,16 +103,16 @@ async def shutdown_event():
 
 
 # Подключаем роутеры
-app.include_router(test_router, prefix="/api/v1", tags=["Тесты"])
-app.include_router(answer_router, prefix="/api/v1", tags=["Ответы"])
-app.include_router(question_router, prefix="/api/v1", tags=["Вопросы"])
-app.include_router(answered_question_router, prefix="/api/v1", tags=["Отвеченные вопросы"])
-app.include_router(finish_test_router, prefix="/api/v1", tags=["Завершение тестов"])
-app.include_router(candidate_analysis_router, prefix="/api/v1", tags=["Анализ кандидатов"])
-app.include_router(test_list_router, prefix="/api/v1", tags=["Список тестов"])
-app.include_router(hr_results_router, prefix="/api/v1", tags=["HR результаты"])
-app.include_router(hr_results_by_link_router, prefix="/api/v1", tags=["HR результаты по ссылке"])
-app.include_router(user_router, prefix="/api/v1", tags=["Аутентификация"])
+app.include_router(test_router, prefix="/api/v1")
+app.include_router(answer_router, prefix="/api/v1")
+app.include_router(question_router, prefix="/api/v1")
+app.include_router(answered_question_router, prefix="/api/v1")
+app.include_router(finish_test_router, prefix="/api/v1")
+app.include_router(candidate_analysis_router, prefix="/api/v1")
+app.include_router(test_list_router, prefix="/api/v1")
+app.include_router(hr_results_router, prefix="/api/v1")
+app.include_router(hr_results_by_link_router, prefix="/api/v1")
+app.include_router(user_router, prefix="/api/v1")
 
 
 @app.get("/")

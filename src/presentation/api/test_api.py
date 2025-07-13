@@ -14,7 +14,7 @@ from src.presentation.schemas.requests.start_test_request import StartTestReques
 from src.presentation.schemas.responses.question_response import QuestionResponse
 from src.presentation.schemas.responses.test_response import StartTestResponse
 
-router = APIRouter(prefix="/tests", tags=["Tests"])
+router = APIRouter(prefix="/test", tags=["Тесты"])
 
 
 @router.post("/start", response_model=StartTestResponse, status_code=status.HTTP_201_CREATED)

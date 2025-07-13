@@ -10,7 +10,7 @@ from src.infrastructure.db.repositories.SQLVariantRepository import SQLVariantRe
 from src.presentation.schemas.requests.get_answered_question_request import GetAnsweredQuestionRequest
 from src.presentation.schemas.responses.question_response import QuestionResponse
 
-router = APIRouter(prefix="/answered", tags=["AnsweredQuestions"])
+router = APIRouter(prefix="/answered-question", tags=["Отвеченные вопросы"])
 
 
 @router.post("/question", response_model=QuestionResponse, status_code=status.HTTP_200_OK)

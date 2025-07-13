@@ -8,7 +8,7 @@ from src.infrastructure.db.database import get_async_session
 from src.infrastructure.db.repositories.SQLUserRepository import SQLUserRepository
 from src.presentation.schemas.responses.create_user_response import CreateUserResponse
 
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter(prefix="/auth", tags=["Аутентификация"])
 
 
 @router.post("", response_model=CreateUserResponse, status_code=status.HTTP_200_OK)
