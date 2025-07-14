@@ -6,7 +6,3 @@ class VariantResponse(BaseModel):
     id: int
     text: str
     is_selected: bool = False
-
-class StartTestResponse(BaseModel):
-    result_id: int
-    question: QuestionResponse 
