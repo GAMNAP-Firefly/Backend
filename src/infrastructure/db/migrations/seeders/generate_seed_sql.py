@@ -1,14 +1,21 @@
 import pandas as pd
 from collections import defaultdict
 import json
-import os
 from typing import cast
 
-
-def parse_question_row(row: pd.Series):
-    """Парсит строку, возвращает список номеров вопросов (int), пропуская пустые"""
-    return [int(cell) for cell in row if pd.notna(cell) and str(cell).strip().isdigit()]
-
+def parse_question_row(row):
+    """Парсит строку, возвращает список номеров вопросов (int), пропуская пустые и разбирая числа через пробел и точки."""
+    result = []
+    for cell in list(row):
+        if pd.notna(cell):
+            for part in str(cell).split():
+                try:
+                    num = float(part.replace(',', '.'))
+                    if num.is_integer():
+                        result.append(int(num))
+                except ValueError:
+                    continue
+    return result
 
 def generate_sql_seed(file_path, output_sql_file='seed.sql'):
     try:
@@ -51,7 +58,6 @@ def generate_sql_seed(file_path, output_sql_file='seed.sql'):
         question_id = male_question_count + idx + 1  # ID от 567 до 1132
         q_text = str(row[0]).strip()
         questions.append({'id': question_id, 'test_id': 2, 'text': q_text})
-        # ❌ не нужен question_id_map — категории завязаны на мужскую нумерацию
 
     # === Категории
     category_id_counter = 1
@@ -169,8 +175,7 @@ def generate_sql_seed(file_path, output_sql_file='seed.sql'):
     print(f"✅ SQL-файл создан: {output_sql_file}")
     print(f"📊 Тестов: {len(tests)}, Вариантов: {len(variants)}, Категорий: {len(categories)}, Вопросов: {len(questions)}")
 
-
 if __name__ == '__main__':
-    excel_path = './src/infrastructure/db/migrations/seeders/test_data.xlsx'   # путь к твоему XLSX
+    excel_path = './src/infrastructure/db/migrations/seeders/test_data.xlsx'   # путь к вашему XLSX
     output_sql = './src/infrastructure/db/migrations/seeders/seed.sql'         # путь, куда сохранить SQL
     generate_sql_seed(excel_path, output_sql)
