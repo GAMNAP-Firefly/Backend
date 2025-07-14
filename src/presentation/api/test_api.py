@@ -7,6 +7,7 @@ from src.application.usecase.start_test_use_case import StartTestUseCase
 from src.infrastructure.db.database import get_async_session
 from src.infrastructure.db.repositories.SQLAnswerRepository import SQLAnswerRepository
 from src.infrastructure.db.repositories.SQLCategoryRepository import SQLCategoryRepository
+from src.infrastructure.db.repositories.SQLQuestionRepository import SQLQuestionRepository
 from src.infrastructure.db.repositories.SQLResultRepository import SQLResultRepository
 from src.infrastructure.db.repositories.SQLTestRepository import SQLTestRepository
 from src.presentation.schemas.requests.finish_test_request import FinishTestRequest
@@ -55,6 +56,7 @@ async def finish_test(
         result_repo=SQLResultRepository(session),
         answer_repo=SQLAnswerRepository(session),
         category_repo=SQLCategoryRepository(session),
+        question_repo=SQLQuestionRepository(session)
     )
     try:
         category_scores, hr_share_link = await use_case.execute(result_id=request.result_id)
