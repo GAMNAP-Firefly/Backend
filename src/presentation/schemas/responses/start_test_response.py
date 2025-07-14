@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 
 
-class GetResultResponse(BaseModel):
+class StartTestResponse(BaseModel):
     result_id: int
-

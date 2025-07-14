@@ -2,5 +2,5 @@ from dataclasses import dataclass
 
 
 @dataclass
-class GetResultDTO:
+class StartTestDTO:
     result_id: int

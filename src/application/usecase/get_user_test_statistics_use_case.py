@@ -1,18 +1,12 @@
-from datetime import datetime
 from typing import List
 
-from src.application.dto.GetResultDTO import GetResultDTO
 from src.application.dto.GetUserTestStatisticsDTO import GetUserTestStatisticsDTO
 from src.domain.entity.Answer import Answer
 from src.domain.entity.Question import Question
 from src.domain.entity.Result import Result
-from src.domain.entity.Test import Test
-from src.domain.entity.User import User
 from src.domain.repository.AnswerRepository import AnswerRepository
 from src.domain.repository.QuestionRepository import QuestionRepository
 from src.domain.repository.ResultRepository import ResultRepository
-from src.domain.repository.TestRepository import TestRepository
-from src.domain.repository.UserRepository import UserRepository
 
 
 class GetUserTestStatisticsUseCase:

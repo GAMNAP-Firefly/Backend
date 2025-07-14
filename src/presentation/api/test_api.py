@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.application.dto.StartTestDTO import StartTestDTO
+from src.application.service.jwt_service import get_current_user_id
 from src.application.usecase.finish_test_use_case import FinishTestUseCase
 from src.application.usecase.get_all_tests_use_case import GetAllTestsUseCase
 from src.application.usecase.start_test_use_case import StartTestUseCase
@@ -10,10 +12,12 @@ from src.infrastructure.db.repositories.SQLCategoryRepository import SQLCategory
 from src.infrastructure.db.repositories.SQLQuestionRepository import SQLQuestionRepository
 from src.infrastructure.db.repositories.SQLResultRepository import SQLResultRepository
 from src.infrastructure.db.repositories.SQLTestRepository import SQLTestRepository
+from src.infrastructure.db.repositories.SQLUserRepository import SQLUserRepository
 from src.presentation.schemas.requests.finish_test_request import FinishTestRequest
 from src.presentation.schemas.requests.start_test_request import StartTestRequest
 from src.presentation.schemas.responses.finish_test_response import FinishTestResponse, CategoryScoreResponse, \
     HRShareLinkResponse
+from src.presentation.schemas.responses.start_test_response import StartTestResponse
 from src.presentation.schemas.responses.test_list_response import TestListResponse, TestResponse
 
 router = APIRouter(prefix="/test", tags=["Тесты"])
@@ -32,16 +36,25 @@ async def get_all_tests(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/start", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/start", response_model=StartTestResponse, status_code=status.HTTP_200_OK)
 async def start_test(
         request: StartTestRequest,
+        user_id: int = Depends(get_current_user_id),
         session: AsyncSession = Depends(get_async_session)
 ):
     use_case = StartTestUseCase(
         result_repo=SQLResultRepository(session),
+        user_repo=SQLUserRepository(session),
+        test_repo=SQLTestRepository(session)
     )
     try:
-        await use_case.execute(result_id=request.result_id)
+        dto = await use_case.execute(
+            test_id=request.test_id,
+            user_id=user_id
+        )
+        return StartTestResponse(
+            result_id=dto.result_id
+        )
 
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
