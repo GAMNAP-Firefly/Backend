@@ -40,7 +40,7 @@ class GetResultUseCase:
                     id=0,  # заглушка
                     user=user,
                     test=test,
-                    start_time=datetime.now(),
+                    start_time=None,
                     end_time=None,
                     status="in_progress"
                 )
