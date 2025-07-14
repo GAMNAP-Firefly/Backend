@@ -1,10 +1,12 @@
 from src.application.dto.HRResultRowDTO import HRResultRowDTO
 
+
 class GetAllHRResultsUseCase:
     """
     Use case для получения всех завершенных результатов для HR.
     Доступ защищен секретным ключом.
     """
+
     def __init__(self, result_repo):
         self.result_repo = result_repo
 
@@ -31,4 +33,4 @@ class GetAllHRResultsUseCase:
                 end_time=r.end_time.isoformat() if r.end_time else '',
                 link_token=r.link_token
             ) for r in finished_results if r.link_token
-        ] 
+        ]

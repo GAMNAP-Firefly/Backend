@@ -5,32 +5,30 @@ from src.application.usecase.get_hr_results_by_link_use_case import GetHRResults
 from src.infrastructure.db.database import get_async_session
 from src.infrastructure.db.repositories.SQLAnswerRepository import SQLAnswerRepository
 from src.infrastructure.db.repositories.SQLCategoryRepository import SQLCategoryRepository
+from src.infrastructure.db.repositories.SQLQuestionRepository import SQLQuestionRepository
 from src.infrastructure.db.repositories.SQLResultRepository import SQLResultRepository
 from src.infrastructure.db.repositories.SQLTestRepository import SQLTestRepository
 from src.presentation.schemas.requests.hr_results_by_link_request import HRResultsByLinkRequest
 from src.presentation.schemas.responses.hr_results_by_link_response import HRResultsByLinkResponse
 
-router = APIRouter(prefix="/hr-results-by-link", tags=["HR результаты по ссылке"])
+router = APIRouter(prefix="/results-by-link", tags=["HR результаты по ссылке"])
 
 
-@router.post("/results", response_model=HRResultsByLinkResponse, status_code=status.HTTP_200_OK)
+@router.post("", response_model=HRResultsByLinkResponse, status_code=status.HTTP_200_OK)
 async def get_hr_results_by_link(
         request: HRResultsByLinkRequest,
         session: AsyncSession = Depends(get_async_session)
 ):
-    """
-    Получает результаты теста по ссылке для HR.
-    Позволяет HR просматривать результаты кандидата по уникальному коду.
-    """
     use_case = GetHRResultsByLinkUseCase(
         result_repo=SQLResultRepository(session),
         answer_repo=SQLAnswerRepository(session),
+        question_repo=SQLQuestionRepository(session),
         category_repo=SQLCategoryRepository(session),
         test_repo=SQLTestRepository(session),
     )
     try:
         candidate_analysis, category_scores = await use_case.execute(share_code=request.share_code)
-        
+
         return HRResultsByLinkResponse(
             candidate_analysis={
                 "test_name": candidate_analysis.test_name,
@@ -49,4 +47,4 @@ async def get_hr_results_by_link(
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e)) 
+        raise HTTPException(status_code=400, detail=str(e))
