@@ -2,4 +2,4 @@ from pydantic import BaseModel
 
 
 class StartTestRequest(BaseModel):
-    result_id: int
+    test_id: int

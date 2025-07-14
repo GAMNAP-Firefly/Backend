@@ -3,10 +3,8 @@ from typing import Optional
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.application.dto.GetResultDTO import GetResultDTO
 from src.application.dto.GetUserTestStatisticsDTO import GetUserTestStatisticsDTO
 from src.application.service.jwt_service import get_current_user_id
-from src.application.usecase.get_result_use_case import GetResultUseCase
 from src.application.usecase.get_user_test_statistics_use_case import GetUserTestStatisticsUseCase
 from src.application.usecase.submit_answer_use_case import SubmitAnswerUseCase
 from src.infrastructure.db.database import get_async_session
@@ -17,9 +15,7 @@ from src.infrastructure.db.repositories.SQLTestRepository import SQLTestReposito
 from src.infrastructure.db.repositories.SQLUserRepository import SQLUserRepository
 from src.infrastructure.db.repositories.SQLVariantRepository import SQLVariantRepository
 from src.presentation.schemas.requests.answer_request import SubmitAnswerRequest
-from src.presentation.schemas.requests.get_result_id_request import GetResultRequest
 from src.presentation.schemas.requests.get_user_test_statistics_request import GetUserTestStatisticsRequest
-from src.presentation.schemas.responses.get_result_id_response import GetResultResponse
 from src.presentation.schemas.responses.get_user_test_statistics_response import GetUserTestStatisticsResponse
 
 router = APIRouter(prefix="/answer", tags=["Ответы"])
@@ -50,28 +46,6 @@ async def submit_answer(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/result", response_model=GetResultResponse, status_code=status.HTTP_200_OK)
-async def get_user_test_result(
-        request: GetResultRequest,
-        user_id: int = Depends(get_current_user_id),
-        session: AsyncSession = Depends(get_async_session)
-):
-    use_case = GetResultUseCase(
-        user_repo=SQLUserRepository(session),
-        test_repo=SQLTestRepository(session),
-        result_repo=SQLResultRepository(session)
-    )
-    try:
-        result_dto: GetResultDTO = await use_case.execute(
-            user_id=user_id,
-            test_id=request.test_id
-        )
-        return GetResultResponse(result_id=result_dto.result_id)
-
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-
 @router.get("/statistics", response_model=Optional[GetUserTestStatisticsResponse], status_code=status.HTTP_200_OK)
 async def get_user_test_statistics(
         request: GetUserTestStatisticsRequest = Depends(),
@@ -86,7 +60,8 @@ async def get_user_test_statistics(
         result_dto: GetUserTestStatisticsDTO = await use_case.execute(
             result_id=request.result_id
         )
-        return GetUserTestStatisticsResponse(total_questions=result_dto.total_questions, progress_percent=result_dto.progress_percent)
+        return GetUserTestStatisticsResponse(total_questions=result_dto.total_questions,
+                                             progress_percent=result_dto.progress_percent)
 
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
