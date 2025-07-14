@@ -2,6 +2,6 @@ from pydantic import BaseModel
 
 
 class GetUserTestStatisticsResponse(BaseModel):
-    total: int
+    total_questions: int
     progress_percent: float
 
