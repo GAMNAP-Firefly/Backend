@@ -1,4 +1,5 @@
 from pydantic import BaseModel
 
+
 class HRResultsRequest(BaseModel):
-    access_key: str 
+    access_key: str

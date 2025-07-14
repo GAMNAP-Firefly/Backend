@@ -1,7 +1,9 @@
-import pandas as pd
-from collections import defaultdict
 import json
+from collections import defaultdict
 from typing import cast
+
+import pandas as pd
+
 
 def parse_question_row(row):
     """Парсит строку, возвращает список номеров вопросов (int), пропуская пустые и разбирая числа через пробел и точки."""
@@ -16,6 +18,7 @@ def parse_question_row(row):
                 except ValueError:
                     continue
     return result
+
 
 def generate_sql_seed(file_path, output_sql_file='seed.sql'):
     try:
@@ -173,9 +176,11 @@ def generate_sql_seed(file_path, output_sql_file='seed.sql'):
             f.write(stmt + '\n')
 
     print(f"✅ SQL-файл создан: {output_sql_file}")
-    print(f"📊 Тестов: {len(tests)}, Вариантов: {len(variants)}, Категорий: {len(categories)}, Вопросов: {len(questions)}")
+    print(
+        f"📊 Тестов: {len(tests)}, Вариантов: {len(variants)}, Категорий: {len(categories)}, Вопросов: {len(questions)}")
+
 
 if __name__ == '__main__':
-    excel_path = './src/infrastructure/db/migrations/seeders/test_data.xlsx'   # путь к вашему XLSX
-    output_sql = './src/infrastructure/db/migrations/seeders/seed.sql'         # путь, куда сохранить SQL
+    excel_path = './src/infrastructure/db/migrations/seeders/test_data.xlsx'  # путь к вашему XLSX
+    output_sql = './src/infrastructure/db/migrations/seeders/seed.sql'  # путь, куда сохранить SQL
     generate_sql_seed(excel_path, output_sql)

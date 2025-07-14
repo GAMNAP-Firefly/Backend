@@ -2,9 +2,9 @@ import uuid
 from datetime import datetime
 from typing import List
 
-from src.application.service.scoring_service import ScoringService
 from src.application.dto.CategoryScoreDTO import CategoryScoreDTO
 from src.application.dto.HRShareLinkDTO import HRShareLinkDTO
+from src.application.service.scoring_service import ScoringService
 from src.domain.entity.Answer import Answer
 from src.domain.entity.Result import Result
 from src.domain.repository.AnswerRepository import AnswerRepository
