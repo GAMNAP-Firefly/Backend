@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import List, Tuple
+from typing import List
 
 from src.application.dto.CandidateAnalysisDTO import CandidateAnalysisDTO
 from src.application.dto.CategoryScoreDTO import CategoryScoreDTO
@@ -47,7 +47,7 @@ class FinishTestUseCase:
             answer.question.scoring_rules = question.scoring_rules
 
         # 2. Выполняем бизнес-логику (подсчет очков)
-        scores = ScoringService(self.category_repo).calculate_scores(answers)
+        scores = await ScoringService(self.category_repo).calculate_scores(answers)
         # 3. Собираем данные для DTO (имена категорий)
         category_ids = list(scores.keys())
         categories = await self.category_repo.get_categories_by_ids(category_ids)
@@ -77,7 +77,7 @@ class FinishTestUseCase:
             for cid, score in scores.items()])
 
         completion = client.chat.completions.create(
-            model="google/gemini-2.0-flash-001",
+            model="google/gemini-2.5-flash-lite-preview-06-17",
             messages=[
                 {
                     "role": "user",
