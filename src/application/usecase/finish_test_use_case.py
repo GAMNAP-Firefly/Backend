@@ -1,7 +1,8 @@
 import uuid
 from datetime import datetime
-from typing import List
+from typing import List, Tuple
 
+from src.application.dto.CandidateAnalysisDTO import CandidateAnalysisDTO
 from src.application.dto.CategoryScoreDTO import CategoryScoreDTO
 from src.application.dto.HRShareLinkDTO import HRShareLinkDTO
 from src.application.service.scoring_service import ScoringService
@@ -11,6 +12,7 @@ from src.domain.repository.AnswerRepository import AnswerRepository
 from src.domain.repository.CategoryRepository import CategoryRepository
 from src.domain.repository.QuestionRepository import QuestionRepository
 from src.domain.repository.ResultRepository import ResultRepository
+from src.domain.repository.TestRepository import TestRepository
 
 
 class FinishTestUseCase:
@@ -22,13 +24,15 @@ class FinishTestUseCase:
     def __init__(self, result_repo: ResultRepository,
                  answer_repo: AnswerRepository,
                  category_repo: CategoryRepository,
-                 question_repo: QuestionRepository):
+                 question_repo: QuestionRepository,
+                 test_repo: TestRepository):
         self.result_repo = result_repo
         self.answer_repo = answer_repo
         self.category_repo = category_repo
         self.question_repo = question_repo
+        self.test_repo = test_repo
 
-    async def execute(self, result_id: int) -> tuple[list[CategoryScoreDTO], HRShareLinkDTO]:
+    async def execute(self, result_id: int) -> tuple[CandidateAnalysisDTO, list[CategoryScoreDTO], HRShareLinkDTO]:
         """
         Выполняет use case.
 
@@ -101,5 +105,15 @@ class FinishTestUseCase:
                 score=score
             ) for cid, score in scores.items()
         ]
+        duration_minutes = (result.end_time - result.start_time).total_seconds() / 60
+        test = await self.test_repo.get_test(result.test.id)
 
-        return category_scores, hr_share_link
+        candidate_analysis = CandidateAnalysisDTO(
+            test_name=test.name,
+            start_time=result.start_time.isoformat(),
+            end_time=result.end_time.isoformat(),
+            duration_minutes=duration_minutes,
+            interpretation=result.interpretation or "Анализ недоступен"
+        )
+
+        return candidate_analysis, category_scores, hr_share_link
