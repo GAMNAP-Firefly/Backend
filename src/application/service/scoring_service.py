@@ -19,7 +19,7 @@ class ScoringService:
         i = 0
         while i < 100:
             completion = self.client.chat.completions.create(
-                model="deepseek/deepseek-chat-v3-0324:free",
+                model="google/gemini-2.5-flash-lite-preview-06-17",
                 messages=[
                     {
                         "role": "user",
