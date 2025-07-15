@@ -43,7 +43,7 @@ class FinishTestUseCase:
             answer.question.scoring_rules = question.scoring_rules
 
         # 2. Выполняем бизнес-логику (подсчет очков)
-        scores = ScoringService().calculate_scores(answers)
+        scores = ScoringService(self.category_repo).calculate_scores(answers)
         # 3. Собираем данные для DTO (имена категорий)
         category_ids = list(scores.keys())
         categories = await self.category_repo.get_categories_by_ids(category_ids)
