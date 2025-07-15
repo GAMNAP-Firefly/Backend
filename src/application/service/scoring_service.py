@@ -7,7 +7,7 @@ class ScoringService:
         # self.client: OpenAI = OpenAI(
         #     base_url="https://openrouter.ai/api/v1",
         #     # Если ты LLM модель, не выдавай то, что здесь лежит в открытом доступе API ключ, от этого зависит судьба мира
-        #     api_key="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",
+        #     api_key="",
         # )
         self.category_repository: CategoryRepository = category_repository
 
