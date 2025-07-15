@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.application.dto.StartTestDTO import StartTestDTO
 from src.application.service.jwt_service import get_current_user_id
 from src.application.usecase.finish_test_use_case import FinishTestUseCase
 from src.application.usecase.get_all_tests_use_case import GetAllTestsUseCase
