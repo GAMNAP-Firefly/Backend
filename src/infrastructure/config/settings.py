@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     
     # Настройки CORS
     cors_origins: list = ["*"]
-    cors_allow_credentials: bool = True
+    cors_allow_credentials: bool = False
     cors_allow_methods: list = ["*"]
     cors_allow_headers: list = ["*"]
 

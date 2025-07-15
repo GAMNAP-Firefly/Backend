@@ -1,0 +1,479 @@
+openapi: 3.1.0
+info:
+  title: Fittest
+  description: API для системы тестирования Fittin
+  version: 1.0.0
+paths:
+  /api/v1/test/list:
+    get:
+      tags:
+      - Тесты
+      summary: Get All Tests
+      operationId: get_all_tests_api_v1_test_list_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestListResponse'
+  /api/v1/test/start:
+    post:
+      tags:
+      - Тесты
+      summary: Start Test
+      operationId: start_test_api_v1_test_start_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartTestRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartTestResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/test/finish:
+    post:
+      tags:
+      - Тесты
+      summary: Finish Test
+      operationId: finish_test_api_v1_test_finish_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinishTestRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinishTestResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/answer/submit:
+    post:
+      tags:
+      - Ответы
+      summary: Submit Answer
+      operationId: submit_answer_api_v1_answer_submit_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitAnswerRequest'
+        required: true
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/answer/statistics:
+    get:
+      tags:
+      - Ответы
+      summary: Get User Test Statistics
+      operationId: get_user_test_statistics_api_v1_answer_statistics_get
+      parameters:
+      - name: result_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Result Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/GetUserTestStatisticsResponse'
+                - type: 'null'
+                title: Response Get User Test Statistics Api V1 Answer Statistics
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/question/list:
+    get:
+      tags:
+      - Вопросы
+      summary: Get Question List
+      operationId: get_question_list_api_v1_question_list_get
+      parameters:
+      - name: test_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Test Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/QuestionListResponse'
+                - type: 'null'
+                title: Response Get Question List Api V1 Question List Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/question:
+    get:
+      tags:
+      - Вопросы
+      summary: Get Question
+      operationId: get_question_api_v1_question_get
+      parameters:
+      - name: test_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Test Id
+      - name: question_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Question Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/GetQuestionResponse'
+                - type: 'null'
+                title: Response Get Question Api V1 Question Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/results-by-link:
+    post:
+      tags:
+      - HR результаты по ссылке
+      summary: Get Hr Results By Link
+      operationId: get_hr_results_by_link_api_v1_results_by_link_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HRResultsByLinkRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HRResultsByLinkResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth:
+    post:
+      tags:
+      - Аутентификация
+      summary: Create User
+      operationId: create_user_api_v1_auth_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+  /:
+    get:
+      summary: Root
+      operationId: root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /health:
+    get:
+      summary: Health Check
+      description: Эндпоинт для проверки здоровья приложения.
+      operationId: health_check_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    CategoryScoreResponse:
+      properties:
+        category_name:
+          type: string
+          title: Category Name
+        score:
+          type: number
+          title: Score
+      type: object
+      required:
+      - category_name
+      - score
+      title: CategoryScoreResponse
+    CreateUserResponse:
+      properties:
+        jwt_token:
+          type: string
+          title: Jwt Token
+      type: object
+      required:
+      - jwt_token
+      title: CreateUserResponse
+    FinishTestRequest:
+      properties:
+        result_id:
+          type: integer
+          title: Result Id
+      type: object
+      required:
+      - result_id
+      title: FinishTestRequest
+    FinishTestResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/CategoryScoreResponse'
+          type: array
+          title: Results
+        share_link:
+          anyOf:
+          - $ref: '#/components/schemas/HRShareLinkResponse'
+          - type: 'null'
+      type: object
+      required:
+      - results
+      title: FinishTestResponse
+    GetQuestionResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        text:
+          type: string
+          title: Text
+        variants:
+          items:
+            $ref: '#/components/schemas/GetQuestionVariantResponse'
+          type: array
+          title: Variants
+      type: object
+      required:
+      - id
+      - text
+      - variants
+      title: GetQuestionResponse
+    GetQuestionVariantResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        text:
+          type: string
+          title: Text
+        is_selected:
+          type: boolean
+          title: Is Selected
+          default: false
+      type: object
+      required:
+      - id
+      - text
+      title: GetQuestionVariantResponse
+    GetUserTestStatisticsResponse:
+      properties:
+        total_questions:
+          type: integer
+          title: Total Questions
+        progress_percent:
+          type: number
+          title: Progress Percent
+      type: object
+      required:
+      - total_questions
+      - progress_percent
+      title: GetUserTestStatisticsResponse
+    HRResultsByLinkRequest:
+      properties:
+        share_code:
+          type: string
+          title: Share Code
+      type: object
+      required:
+      - share_code
+      title: HRResultsByLinkRequest
+    HRResultsByLinkResponse:
+      properties:
+        candidate_analysis:
+          type: object
+          title: Candidate Analysis
+        category_scores:
+          items:
+            type: object
+          type: array
+          title: Category Scores
+      type: object
+      required:
+      - candidate_analysis
+      - category_scores
+      title: HRResultsByLinkResponse
+    HRShareLinkResponse:
+      properties:
+        share_code:
+          type: string
+          title: Share Code
+      type: object
+      required:
+      - share_code
+      title: HRShareLinkResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    QuestionListResponse:
+      properties:
+        questions_id:
+          items:
+            type: integer
+          type: array
+          title: Questions Id
+      type: object
+      required:
+      - questions_id
+      title: QuestionListResponse
+    StartTestRequest:
+      properties:
+        test_id:
+          type: integer
+          title: Test Id
+      type: object
+      required:
+      - test_id
+      title: StartTestRequest
+    StartTestResponse:
+      properties:
+        result_id:
+          type: integer
+          title: Result Id
+      type: object
+      required:
+      - result_id
+      title: StartTestResponse
+    SubmitAnswerRequest:
+      properties:
+        question_id:
+          type: integer
+          title: Question Id
+        variant_id:
+          type: integer
+          title: Variant Id
+        result_id:
+          type: integer
+          title: Result Id
+      type: object
+      required:
+      - question_id
+      - variant_id
+      - result_id
+      title: SubmitAnswerRequest
+    TestListResponse:
+      properties:
+        tests:
+          items:
+            $ref: '#/components/schemas/TestResponse'
+          type: array
+          title: Tests
+      type: object
+      required:
+      - tests
+      title: TestListResponse
+    TestResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      required:
+      - id
+      - name
+      - description
+      title: TestResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

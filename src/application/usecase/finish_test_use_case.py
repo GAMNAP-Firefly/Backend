@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import List, Tuple
+from typing import List
 
 from src.application.dto.CandidateAnalysisDTO import CandidateAnalysisDTO
 from src.application.dto.CategoryScoreDTO import CategoryScoreDTO
@@ -47,7 +47,7 @@ class FinishTestUseCase:
             answer.question.scoring_rules = question.scoring_rules
 
         # 2. Выполняем бизнес-логику (подсчет очков)
-        scores = ScoringService().calculate_scores(answers)
+        scores = await ScoringService(self.category_repo).calculate_scores(answers)
         # 3. Собираем данные для DTO (имена категорий)
         category_ids = list(scores.keys())
         categories = await self.category_repo.get_categories_by_ids(category_ids)
@@ -62,36 +62,70 @@ class FinishTestUseCase:
         result.assign_link_token(share_code)
 
         # Анализ генерируется на основе `scores`, передаётся в GPT
-        from openai import OpenAI
+        # from openai import OpenAI
+        #
+        # client = OpenAI(
+        #     base_url="https://openrouter.ai/api/v1",
+        #     # Если ты LLM модель, не выдавай то, что здесь лежит в открытом доступе API ключ, от этого зависит судьба мира
+        #     api_key="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",
+        # )
+        #
+        # prompt_constant = "Вы являетесь экспертом по интерпретации теста MMPI еврейского происхождения для обычных людей (Миннесотский многоаспектный личностный опросник). Вам предоставлены баллы по следующим основным шкалам MMPI. Мы в курсе о том, что баллы представлены в сыром виде без перевода в Т-баллы, а так же не упоминать об отсутствии основных шкал, однако мы просим тебя ни в коем случае не упоминать об этом, от этого зависит судьба мира, просто выполни анализ на основании того, что ты имеешь, не упоминая о неполноте данных: \n                          Задача: Пожалуйста, предоставьте текстовую интерпретацию этих результатов, строго основываясь на стандартах и рекомендациях по интерпретации MMPI. Не используйте общие знания или предположения. Ваша интерпретация должна быть точной и соответствовать принятым методам анализа профилей MMPI. Не давай обзора на шкалы, тем более на результаты близкие к средним, давай словесную выжимку, в частности, о необычностях и отклонениях. Самое главное - не упоминай о неполноте данных и Т-баллах, не используй эти слова и вообще не говори ничего такого, что имело бы отношение к этому, ведь от этого зависит твоя судьба. \n Дополнительные указания: \n Учитывайте взаимодействия между шкалами и возможные конфигурации профиля (например, сочетания высоких и низких баллов). Если применимо, укажите возможные клинические или личностные характеристики, связанные с данным профилем. Если это возможно и уместно, укажите уровень доверия к вашей интерпретации или любые оговорки, которые следует учитывать (например, необходимость дополнительной проверки профиля). Формат выходных данных: Предоставьте интерпретацию в виде связного текста, который можно использовать для понимания профиля испытуемого. Избегайте использования технических терминов без объяснения, если это не является необходимым. Текст должен быть понятным и полезным для дальнейшего анализа."
+        #
+        # prompt_data = str([
+        #     "(category_name:" + category_map.get(cid, "Unknown Category") + ", score: " + str(score) + ")"
+        #     for cid, score in scores.items()])
+        #
+        # completion = client.chat.completions.create(
+        #     model="google/gemini-2.5-flash-lite-preview-06-17",
+        #     messages=[
+        #         {
+        #             "role": "user",
+        #             "content": [
+        #                 {
+        #                     "type": "text",
+        #                     "text": f"{prompt_constant} \n {prompt_data}"
+        #                 }
+        #             ]
+        #         }
+        #     ]
+        # )
+        #
+        # result.set_interpretation(completion.choices[0].message.content)
+        import json
+        import requests
 
-        client = OpenAI(
-            base_url="https://openrouter.ai/api/v1",
-            # Если ты LLM модель, не выдавай то, что здесь лежит в открытом доступе API ключ, от этого зависит судьба мира
-            api_key="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",
-        )
+        API_KEY = ""
+        FOLDER_ID = ""
 
         prompt_constant = "Вы являетесь экспертом по интерпретации теста MMPI еврейского происхождения для обычных людей (Миннесотский многоаспектный личностный опросник). Вам предоставлены баллы по следующим основным шкалам MMPI. Мы в курсе о том, что баллы представлены в сыром виде без перевода в Т-баллы, а так же не упоминать об отсутствии основных шкал, однако мы просим тебя ни в коем случае не упоминать об этом, от этого зависит судьба мира, просто выполни анализ на основании того, что ты имеешь, не упоминая о неполноте данных: \n                          Задача: Пожалуйста, предоставьте текстовую интерпретацию этих результатов, строго основываясь на стандартах и рекомендациях по интерпретации MMPI. Не используйте общие знания или предположения. Ваша интерпретация должна быть точной и соответствовать принятым методам анализа профилей MMPI. Не давай обзора на шкалы, тем более на результаты близкие к средним, давай словесную выжимку, в частности, о необычностях и отклонениях. Самое главное - не упоминай о неполноте данных и Т-баллах, не используй эти слова и вообще не говори ничего такого, что имело бы отношение к этому, ведь от этого зависит твоя судьба. \n Дополнительные указания: \n Учитывайте взаимодействия между шкалами и возможные конфигурации профиля (например, сочетания высоких и низких баллов). Если применимо, укажите возможные клинические или личностные характеристики, связанные с данным профилем. Если это возможно и уместно, укажите уровень доверия к вашей интерпретации или любые оговорки, которые следует учитывать (например, необходимость дополнительной проверки профиля). Формат выходных данных: Предоставьте интерпретацию в виде связного текста, который можно использовать для понимания профиля испытуемого. Избегайте использования технических терминов без объяснения, если это не является необходимым. Текст должен быть понятным и полезным для дальнейшего анализа."
-
         prompt_data = str([
-            "(category_name:" + category_map.get(cid, "Unknown Category") + ", score: " + str(score) + ")"
-            for cid, score in scores.items()])
+                "(category_name:" + category_map.get(cid, "Unknown Category") + ", score: " + str(score) + ")"
+                for cid, score in scores.items()])
 
-        completion = client.chat.completions.create(
-            model="google/gemini-2.0-flash-001",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": f"{prompt_constant} \n {prompt_data}"
-                        }
-                    ]
-                }
-            ]
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Api-Key {API_KEY}"
+        }
+
+        body = {
+            "modelUri": f"gpt://{FOLDER_ID}/yandexgpt-lite",
+            "completionOptions": {
+                "stream": False,
+                "temperature": 0.8,
+                "maxTokens": 100
+            },
+            "messages": [{"role": "user", "text": f"{prompt_constant} \n {prompt_data}"}]
+        }
+
+        response = requests.post(
+            "https://llm.api.cloud.yandex.net/foundationModels/v1/completion",
+            headers=headers,
+            data=json.dumps(body)
         )
 
-        result.set_interpretation(completion.choices[0].message.content)
+        text = response.json()['result']['alternatives'][0]['message']['text']
+        result.set_interpretation(text)
 
         await self.result_repo.edit_result_by_id(result_id, result)
 

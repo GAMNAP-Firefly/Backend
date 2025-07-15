@@ -16,16 +16,8 @@ services:
     build: .
     container_name: fastapi_backend
     restart: always
-
-  nginx:
-    build: ./nginx
-    container_name: fastapi_nginx
-    restart: always
     ports:
-      - "8080:80"
-      - "8443:443"
-    depends_on:
-      - backend
+      - "8080:8000"
 
 volumes:
   postgres_data:

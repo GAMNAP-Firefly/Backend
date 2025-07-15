@@ -50,7 +50,7 @@ class GetHRResultsByLinkUseCase:
         for answer in answers:
             question = await self.question_repo.get_question(question_id=answer.question.id)
             answer.question.scoring_rules = question.scoring_rules
-        scores = ScoringService().calculate_scores(answers)
+        scores = await ScoringService(self.category_repo).calculate_scores(answers)
 
         # 5. Получаем названия категорий
         category_ids = list(scores.keys())
