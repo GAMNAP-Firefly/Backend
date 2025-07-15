@@ -15,7 +15,7 @@ from src.infrastructure.db.repositories.SQLUserRepository import SQLUserReposito
 from src.presentation.schemas.requests.finish_test_request import FinishTestRequest
 from src.presentation.schemas.requests.start_test_request import StartTestRequest
 from src.presentation.schemas.responses.finish_test_response import FinishTestResponse, CategoryScoreResponse, \
-    HRShareLinkResponse
+    HRShareLinkResponse, CandidateAnalysisResponse
 from src.presentation.schemas.responses.start_test_response import StartTestResponse
 from src.presentation.schemas.responses.test_list_response import TestListResponse, TestResponse
 
@@ -68,15 +68,23 @@ async def finish_test(
         result_repo=SQLResultRepository(session),
         answer_repo=SQLAnswerRepository(session),
         category_repo=SQLCategoryRepository(session),
-        question_repo=SQLQuestionRepository(session)
+        question_repo=SQLQuestionRepository(session),
+        test_repo=SQLTestRepository(session)
     )
     try:
-        category_scores, hr_share_link = await use_case.execute(result_id=request.result_id)
+        candidate_analysis, category_scores, hr_share_link = await use_case.execute(result_id=request.result_id)
 
         return FinishTestResponse(
             results=[CategoryScoreResponse(category_name=dto.category_name, score=dto.score) for dto in
                      category_scores],
-            share_link=HRShareLinkResponse(share_code=hr_share_link.share_code)
+            share_link=HRShareLinkResponse(share_code=hr_share_link.share_code),
+            candidate_analysis=CandidateAnalysisResponse(
+                test_name=request.test_name,
+                start_time=request.start_time,
+                end_time=request.end_time,
+                duration_minutes=request.duration_minutes,
+                interpretation=request.interpretation
+            )
         )
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
