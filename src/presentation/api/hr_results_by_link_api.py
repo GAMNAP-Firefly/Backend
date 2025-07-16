@@ -16,7 +16,7 @@ router = APIRouter(prefix="/results-by-link", tags=["HR результаты п�
 
 @router.post("", response_model=HRResultsByLinkResponse, status_code=status.HTTP_200_OK)
 async def get_hr_results_by_link(
-        request: HRResultsByLinkRequest = Depends(),
+        request: HRResultsByLinkRequest,
         session: AsyncSession = Depends(get_async_session)
 ):
     use_case = GetHRResultsByLinkUseCase(
