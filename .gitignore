@@ -104,8 +104,11 @@ cython_debug/
 # dotenv
 .env
 .env.*
+/.env
 
 # OS files
 .DS_Store
 Thumbs.db
 /test_completion.py
+
+
