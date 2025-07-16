@@ -46,4 +46,4 @@ fi
 # АХАХАХАХАХААХХАХАХА АХАХАХАХАХХАХА АХАХАХАХАХАХАХАХАХАХХАХАХАХАХА АХАХА
 
 # Запускаем приложение с правильным логированием
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --log-level=info --access-logfile=- --error-logfile=- src.main:app
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 --log-level=info --access-logfile=- --error-logfile=- src.main:app --timeout 120

@@ -79,11 +79,11 @@ async def finish_test(
                      category_scores],
             share_link=HRShareLinkResponse(share_code=hr_share_link.share_code),
             candidate_analysis=CandidateAnalysisResponse(
-                test_name=request.test_name,
-                start_time=request.start_time,
-                end_time=request.end_time,
-                duration_minutes=request.duration_minutes,
-                interpretation=request.interpretation
+                test_name=candidate_analysis.test_name,
+                start_time=candidate_analysis.start_time,
+                end_time=candidate_analysis.end_time,
+                duration_minutes=candidate_analysis.duration_minutes,
+                interpretation=candidate_analysis.interpretation
             )
         )
     except Exception as e:
