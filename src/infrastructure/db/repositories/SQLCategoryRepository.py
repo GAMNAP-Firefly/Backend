@@ -11,17 +11,17 @@ class SQLCategoryRepository(CategoryRepository):
 
     async def add_category(self, category: Category) -> Category:
         """Добавить категорию и вернуть созданную сущность."""
-        db_category = CategoryModel(id=category.id, name=category.name)
+        db_category = CategoryModel(id=category.id, name=category.name, mean=category.mean, deviation=category.deviation)
         self.session.add(db_category)
         await self.session.commit()
         await self.session.refresh(db_category)  # Получаем данные с БД (включая автоинкремент)
-        return Category(id=db_category.id, name=db_category.name)
+        return Category(id=db_category.id, name=db_category.name, mean=db_category.mean, deviation=db_category.deviation)
 
     async def get_category(self, category_id) -> Category:
         """Получить категорию с id."""
         db_category = await self.session.get(CategoryModel, category_id)
         if db_category:
-            return Category(id=db_category.id, name=db_category.name)
+            return Category(id=db_category.id, name=db_category.name, mean=db_category.mean, deviation=db_category.deviation)
         raise ValueError("Category not found")
 
     async def remove_category(self, category_id: int) -> None:
@@ -38,6 +38,8 @@ class SQLCategoryRepository(CategoryRepository):
         db_category = await self.session.get(CategoryModel, category_id)
         if db_category:
             db_category.name = category.name
+            db_category.mean = category.mean
+            db_category.deviation = category.deviation
             await self.session.commit()
         else:
             raise ValueError("Category not found")
@@ -47,11 +49,11 @@ class SQLCategoryRepository(CategoryRepository):
         stmt = select(CategoryModel)
         result = await self.session.execute(stmt)
         db_categories = result.scalars().all()
-        return [Category(id=c.id, name=c.name) for c in db_categories]
+        return [Category(id=c.id, name=c.name, mean=c.mean, deviation=c.deviation) for c in db_categories]
 
     async def get_categories_by_ids(self, ids: list[int]) -> List[Category]:
         """Получить несколько категорий по списку их ID."""
         stmt = select(CategoryModel).where(CategoryModel.id.in_(ids))
         result = await self.session.execute(stmt)
         db_categories = result.scalars().all()
-        return [Category(id=c.id, name=c.name) for c in db_categories]
+        return [Category(id=c.id, name=c.name, mean=c.mean, deviation=c.deviation) for c in db_categories]
