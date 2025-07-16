@@ -21,14 +21,14 @@ class ScoringService:
                     cid = int(category_id)
                     category_scores[cid] = category_scores.get(cid, 0) + score
 
-        # for category_id, score in category_scores.items():
-        #     category: Category = await self.category_repository.get_category(category_id=category_id)
-        #     scale_name = category.name
-        #     mean = category.mean
-        #     deviation = category.deviation
-        #     category_scores[category_id] = await self._raw_to_t_scores(scale_name=scale_name,
-        #                                                                score=score,
-        #                                                                mean=mean,
-        #                                                                deviation=deviation)
+        for category_id, score in category_scores.items():
+            category: Category = await self.category_repository.get_category(category_id=category_id)
+            scale_name = category.name
+            mean = category.mean
+            deviation = category.deviation
+            category_scores[category_id] = await self._raw_to_t_scores(scale_name=scale_name,
+                                                                       score=score,
+                                                                       mean=mean,
+                                                                       deviation=deviation)
 
         return category_scores
