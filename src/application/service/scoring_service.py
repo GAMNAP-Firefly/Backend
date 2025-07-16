@@ -7,8 +7,8 @@ class ScoringService:
         self.category_repository: CategoryRepository = category_repository
 
     async def _raw_to_t_scores(self, scale_name: str, score: int, mean: float, deviation: float) -> float:
-        if mean is None: mean = 0
-        if deviation is None: deviation = 0
+        if mean is None: mean = 12
+        if deviation is None: deviation = 8
         return 50 + 10 * (score - mean) / deviation
 
     async def calculate_scores(self, answers: list) -> dict:

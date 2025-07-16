@@ -30,10 +30,10 @@ if [ "$TABLE_IS_EMPTY" -ne 0 ]; then
   echo "Database is empty. Seeding data..."
   
   # 1. Генерируем seed.sql
-  python ./src/infrastructure/db/migrations/seeders/generate_seed_sql.py
+#  python ./src/infrastructure/db/migrations/seeders/generate_seed_sql.py
   
   # 2. Запускаем SQL-скрипт
-  SEED_FILE="./src/infrastructure/db/migrations/seeders/seed.sql"
+  SEED_FILE="./src/infrastructure/db/migrations/seeders/seed_special.sql"
   if [ -f "$SEED_FILE" ]; then
     psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -a -f "$SEED_FILE"
     echo "Database seeded successfully."
