@@ -1,0 +1,36 @@
+from abc import ABC, abstractmethod
+from typing import List
+
+from src.domain.entity.Variant import Variant
+
+
+class VariantRepository(ABC):
+    @abstractmethod
+    async def add_variant(self, variant: Variant) -> Variant:
+        """Добавить вариант и вернуть созданную сущность"""
+        pass
+
+    @abstractmethod
+    async def get_variant(self, variant_id: int) -> Variant:
+        """Получить вариант с id"""
+        pass
+
+    @abstractmethod
+    async def remove_variant(self, variant_id: int) -> None:
+        """Удалить вариант с id"""
+        pass
+
+    @abstractmethod
+    async def get_all_variants(self) -> List[Variant]:
+        """Получить все варианты"""
+        pass
+
+    @abstractmethod
+    async def edit_variant(self, variant_id: int, variant: Variant) -> None:
+        """Изменить вариант"""
+        pass
+
+    @abstractmethod
+    async def get_variants_by_question_id(self, question_id: int) -> List[Variant]:
+        """Получить варианты ответов у вопроса с id"""
+        pass
